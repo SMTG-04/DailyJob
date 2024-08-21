@@ -77,17 +77,26 @@ jobs:
           speedtest-cli --json > $HOME/speedtest_after_vpn_stop.json
           cat $HOME/speedtest_after_vpn_stop.json
 
-#  build:
-#    needs: clone
-#    runs-on: ubuntu-20.04
-#
-#    steps:
+  build:
+    needs: clone
+    runs-on: ubuntu-20.04
+
+    steps:
+      - name: Install required packages
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y openvpn speedtest-cli
+
+      - name: Measure Speed Before VPN
+        run: |
+          speedtest-cli --json > $HOME/speedtest_before_vpn.json
+          cat $HOME/speedtest_before_vpn.json
 #      - name: Download Git-Automation artifact
 #        uses: actions/download-artifact@v3
 #        with:
 #          name: GoSELL-Automation
 #          path: GoSELL-Automation
-#
+
 #      - name: Switch to main
 #        run: |
 #          cd GoSELL-Automation
