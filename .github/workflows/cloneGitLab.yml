@@ -70,6 +70,7 @@ jobs:
           else
             echo "PID file not found, unable to stop OpenVPN."
           fi
+          sudo pkill -f openvpn
 
       - name: Measure Speed After VPN Stop
         run: |
@@ -77,20 +78,11 @@ jobs:
           speedtest-cli --json > $HOME/speedtest_after_vpn_stop.json
           cat $HOME/speedtest_after_vpn_stop.json
 
-  build:
-    needs: clone
-    runs-on: ubuntu-20.04
-
-    steps:
-      - name: Install required packages
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y openvpn speedtest-cli
-
-      - name: Measure Speed Before VPN
-        run: |
-          speedtest-cli --json > $HOME/speedtest_before_vpn.json
-          cat $HOME/speedtest_before_vpn.json
+#  build:
+#    needs: clone
+#    runs-on: ubuntu-20.04
+#
+#    steps:
 #      - name: Download Git-Automation artifact
 #        uses: actions/download-artifact@v3
 #        with:
