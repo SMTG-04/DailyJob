@@ -28,15 +28,13 @@ jobs:
         run: |
           sudo nohup openvpn --verb 4 --config $(pwd)/${{ secrets.VPN_OVPN }} --auth-user-pass $(pwd)/${{ secrets.VPN_AUTHOR }} > $HOME/openvpn.log 2>&1 &
 
-      - name: Verify VPN Connection
-        run: |
-          
-          echo "$(curl -Is ${{ secrets.KIBANA }} | head -1)"
       - name: Start OpenVPN
         run: |
           for i in {1..5}; do
             sudo nohup openvpn --verb 4 --config $(pwd)/${{ secrets.VPN_OVPN }} --auth-user-pass $(pwd)/${{ secrets.VPN_AUTHOR }} > $HOME/openvpn.log 2>&1 &
-            echo "$(curl -Is ${{ secrets.KIBANA }} | head -1)"
+#            echo "$(curl -Is ${{ secrets.KIBANA }} | head -1)"
+            sleep 60
+            cat $HOME/openvpn.log
             if grep -q "Initialization Sequence Completed" $HOME/openvpn.log; then
               echo "OpenVPN started successfully."
               break
