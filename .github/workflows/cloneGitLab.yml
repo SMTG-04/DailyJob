@@ -32,6 +32,10 @@ jobs:
         run: |
           echo "$(curl -Is ${{ secrets.KIBANA }} | head -1)"
 
+      - name: Check OpenVPN Logs
+        run: |
+          cat $HOME/openvpn.log
+
       - name: Clone GitLab repository
         run: git clone ${{ secrets.GITLAB_REPOSITORY }} GoSELL-Automation
 
