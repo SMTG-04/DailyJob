@@ -24,6 +24,7 @@ jobs:
       - name: Start OpenVPN
         run: |
           sudo nohup openvpn --verb 4 --config $(pwd)/${{ secrets.VPN_OVPN }} --auth-user-pass $(pwd)/${{ secrets.VPN_AUTHOR }} > $HOME/openvpn.log 2>&1 &
+          echo $! > $HOME/openvpn.pid
 
       - name: Verify VPN Connection
         run: |
@@ -32,14 +33,10 @@ jobs:
       - name: Check OpenVPN Logs
         run: |
           cat $HOME/openvpn.log
+          ip a
 
       - name: Clone GitLab repository
         run: git clone ${{ secrets.GITLAB_REPOSITORY }} GoSELL-Automation
-
-#      - name: Switch to main
-#        run: |
-#          cd GoSELL-Automation
-#          git checkout main
 
       - name: Save cloned repo as artifact
         uses: actions/upload-artifact@v3
@@ -47,8 +44,14 @@ jobs:
           name: GoSELL-Automation
           path: GoSELL-Automation
 
-      - name: Kill VPN
-        run: sudo killall openvpn
+      - name: Stop OpenVPN
+        run: |
+          if [ -f $HOME/openvpn.pid ]; then
+            PID=$(cat $HOME/openvpn.pid)
+            sudo kill $PID
+            rm $HOME/openvpn.pid
+          fi
+          ip a
 
   build:
     needs: clone
