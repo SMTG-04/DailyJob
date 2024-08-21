@@ -53,7 +53,7 @@ jobs:
 
   build-and-test:
     needs: clone-git
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
 
     steps:
       - name: Download Git-Automation artifact
@@ -73,18 +73,8 @@ jobs:
           java-version: '22'
           distribution: 'adopt'
 
-#      - name: Cache APT packages and lists
-#        uses: actions/cache@v3
-#        with:
-#          path: |
-#            /var/cache/apt
-#            /var/lib/apt/lists
-#          key: apt-cache-${{ runner.os }}-${{ hashFiles('**/build.gradle') }}
-#          restore-keys: |
-#            apt-cache-${{ runner.os }}-
-#
-#      - name: Install FFmpeg
-#        run: sudo apt-get update && sudo apt-get install -y ffmpeg
+      - name: Install FFmpeg
+        run: sudo apt-get update && sudo apt-get install -y ffmpeg
 
       - name: Cache Maven packages
         uses: actions/cache@v3
