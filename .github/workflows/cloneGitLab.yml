@@ -41,98 +41,94 @@ jobs:
             fi
             echo "OpenVPN start failed, retrying..."
             sudo pkill -f openvpn
-          done      
+          done
 
-      - name: Check OpenVPN Logs
-        run: |
-          cat $HOME/openvpn.log
-
-      - name: Clone GitLab repository
-        run: git clone ${{ secrets.GITLAB_REPOSITORY }} GoSELL-Automation
+#      - name: Clone GitLab repository
+#        run: git clone ${{ secrets.GITLAB_REPOSITORY }} GoSELL-Automation
 
       - name: Stop OpenVPN
         run: |
           sudo pkill -f openvpn
-
-      - name: Save cloned repo as artifact
-        uses: actions/upload-artifact@v3
-        with:
-          name: GoSELL-Automation
-          path: GoSELL-Automation
-
-  build-and-test:
-    needs: clone-git
-    runs-on: ubuntu-20.04
-
-    steps:
-      - name: Download Git-Automation artifact
-        uses: actions/download-artifact@v3
-        with:
-          name: GoSELL-Automation
-          path: GoSELL-Automation
-
-      - name: Switch to main
-        run: |
-          cd GoSELL-Automation
-          git checkout main
-
-      - name: Install Google Chrome
-        run: |
-          wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
-          sudo dpkg -i google-chrome-stable_current_amd64.deb
-          sudo apt-get install -f
-
-      - name: Set up Java
-        uses: actions/setup-java@v3
-        with:
-          java-version: '22'
-          distribution: 'adopt'
-
-      - name: Cache APT packages and lists
-        uses: actions/cache@v3
-        with:
-          path: |
-            /var/cache/apt
-            /var/lib/apt/lists
-          key: apt-cache-${{ runner.os }}-${{ hashFiles('**/build.gradle') }}
-          restore-keys: |
-            apt-cache-${{ runner.os }}-
-
-      - name: Install FFmpeg
-        run: sudo apt-get update && sudo apt-get install -y ffmpeg
-
-      - name: Cache Maven packages
-        uses: actions/cache@v3
-        with:
-          path: ~/.m2/repository
-          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
-          restore-keys: |
-            ${{ runner.os }}-maven-
-
-      - name: Install dependencies
-        run: |
-          cd GoSELL-Automation
-          mvn install -DskipTests
-
-      - name: Run tests
-        run: |
-          cd GoSELL-Automation
-          mvn --batch-mode test "-DsuiteFile=test_config/web/createProductTest.xml"
-
-      - name: Upload all recording .mp4 files
-        if: always()
-        uses: actions/upload-artifact@v3
-        with:
-          name: MP4 Files
-          path: '**/*.mp4'
-
-      - name: Upload Test Report
-        if: always()
-        uses: actions/upload-artifact@v3
-        with:
-          name: Test Reports
-          path: |
-            **/html/index.html
-            **/reportng.css
-            **/reportng.js
-            **/suite*_test*_results.html
+#
+#      - name: Save cloned repo as artifact
+#        uses: actions/upload-artifact@v3
+#        with:
+#          name: GoSELL-Automation
+#          path: GoSELL-Automation
+#
+#  build-and-test:
+#    needs: clone-git
+#    runs-on: ubuntu-20.04
+#
+#    steps:
+#      - name: Download Git-Automation artifact
+#        uses: actions/download-artifact@v3
+#        with:
+#          name: GoSELL-Automation
+#          path: GoSELL-Automation
+#
+#      - name: Switch to main
+#        run: |
+#          cd GoSELL-Automation
+#          git checkout main
+#
+#      - name: Install Google Chrome
+#        run: |
+#          wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+#          sudo dpkg -i google-chrome-stable_current_amd64.deb
+#          sudo apt-get install -f
+#
+#      - name: Set up Java
+#        uses: actions/setup-java@v3
+#        with:
+#          java-version: '22'
+#          distribution: 'adopt'
+#
+#      - name: Cache APT packages and lists
+#        uses: actions/cache@v3
+#        with:
+#          path: |
+#            /var/cache/apt
+#            /var/lib/apt/lists
+#          key: apt-cache-${{ runner.os }}-${{ hashFiles('**/build.gradle') }}
+#          restore-keys: |
+#            apt-cache-${{ runner.os }}-
+#
+#      - name: Install FFmpeg
+#        run: sudo apt-get update && sudo apt-get install -y ffmpeg
+#
+#      - name: Cache Maven packages
+#        uses: actions/cache@v3
+#        with:
+#          path: ~/.m2/repository
+#          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+#          restore-keys: |
+#            ${{ runner.os }}-maven-
+#
+#      - name: Install dependencies
+#        run: |
+#          cd GoSELL-Automation
+#          mvn install -DskipTests
+#
+#      - name: Run tests
+#        run: |
+#          cd GoSELL-Automation
+#          mvn --batch-mode test "-DsuiteFile=test_config/web/createProductTest.xml"
+#
+#      - name: Upload all recording .mp4 files
+#        if: always()
+#        uses: actions/upload-artifact@v3
+#        with:
+#          name: MP4 Files
+#          path: '**/*.mp4'
+#
+#      - name: Upload Test Report
+#        if: always()
+#        uses: actions/upload-artifact@v3
+#        with:
+#          name: Test Reports
+#          path: |
+#            **/html/index.html
+#            **/reportng.css
+#            **/reportng.js
+#            **/suite*_test*_results.html
