@@ -25,31 +25,33 @@ jobs:
         run: |
           sudo nohup openvpn --verb 4 --config $(pwd)/${{ secrets.VPN_OVPN }} --auth-user-pass $(pwd)/${{ secrets.VPN_AUTHOR }} > $HOME/openvpn.log 2>&1 &
           echo $! > $HOME/openvpn.pid
-
-      - name: Verify VPN Connection
-        run: |
-          echo "$(curl -Is ${{ secrets.KIBANA }} | head -1)"
+#
+#      - name: Verify VPN Connection
+#        run: |
+#          echo "$(curl -Is ${{ secrets.KIBANA }} | head -1)"
 
       - name: Check OpenVPN Logs
         run: |
           cat $HOME/openvpn.log
           ip a
 
-#      - name: Clone GitLab repository
-#        run: git clone ${{ secrets.GITLAB_REPOSITORY }} GoSELL-Automation
-#
-#      - name: Save cloned repo as artifact
-#        uses: actions/upload-artifact@v3
-#        with:
-#          name: GoSELL-Automation
-#          path: GoSELL-Automation
+      #      - name: Clone GitLab repository
+      #        run: git clone ${{ secrets.GITLAB_REPOSITORY }} GoSELL-Automation
+      #
+      #      - name: Save cloned repo as artifact
+      #        uses: actions/upload-artifact@v3
+      #        with:
+      #          name: GoSELL-Automation
+      #          path: GoSELL-Automation
 
       - name: Stop OpenVPN
         run: |
           if [ -f $HOME/openvpn.pid ]; then
             PID=$(cat $HOME/openvpn.pid)
-            sudo kill $PID
+            sudo kill $PID || echo "Failed to kill OpenVPN process with PID $PID"
             rm $HOME/openvpn.pid
+          else
+            echo "PID file not found, unable to stop OpenVPN."
           fi
           ip a
 
