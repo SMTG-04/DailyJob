@@ -30,7 +30,20 @@ jobs:
 
       - name: Verify VPN Connection
         run: |
+          
           echo "$(curl -Is ${{ secrets.KIBANA }} | head -1)"
+      - name: Start OpenVPN
+        run: |
+          for i in {1..5}; do
+            sudo nohup openvpn --verb 4 --config $(pwd)/${{ secrets.VPN_OVPN }} --auth-user-pass $(pwd)/${{ secrets.VPN_AUTHOR }} > $HOME/openvpn.log 2>&1 &
+            echo "$(curl -Is ${{ secrets.KIBANA }} | head -1)"
+            if grep -q "Initialization Sequence Completed" $HOME/openvpn.log; then
+              echo "OpenVPN started successfully."
+              break
+            fi
+            echo "OpenVPN start failed, retrying..."
+            sudo pkill -f openvpn
+          done      
 
       - name: Check OpenVPN Logs
         run: |
