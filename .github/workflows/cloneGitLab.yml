@@ -34,43 +34,24 @@ jobs:
       - name: Start OpenVPN
         run: |
           sudo nohup openvpn --verb 4 --config $(pwd)/${{ secrets.VPN_OVPN }} --auth-user-pass $(pwd)/${{ secrets.VPN_AUTHOR }} > $HOME/openvpn.log 2>&1 &
-          echo $! > $HOME/openvpn.pid
 
       - name: Verify VPN Connection
         run: |
           echo "$(curl -Is ${{ secrets.KIBANA }} | head -1)"
 
-      - name: Check OpenVPN Logs
-        run: |
-          cat $HOME/openvpn.log
-          ip a
-
-      - name: Measure Speed After VPN
-        run: |
-          speedtest-cli --json > $HOME/speedtest_after_vpn.json
-          cat $HOME/speedtest_after_vpn.json
-      
-
 #      - name: Clone GitLab repository
 #        run: git clone ${{ secrets.GITLAB_REPOSITORY }} GoSELL-Automation
-#
+
+      - name: Stop OpenVPN
+        run: |
+          sudo pkill -f openvpn
+          ip a
+
 #      - name: Save cloned repo as artifact
 #        uses: actions/upload-artifact@v3
 #        with:
 #          name: GoSELL-Automation
 #          path: GoSELL-Automation
-
-      - name: Stop OpenVPN
-        run: |
-          if [ -f $HOME/openvpn.pid ]; then
-            PID=$(cat $HOME/openvpn.pid)
-            sudo kill $PID || echo "Failed to kill OpenVPN process with PID $PID"
-            echo "$PID"
-            rm $HOME/openvpn.pid
-          else
-            echo "PID file not found, unable to stop OpenVPN."
-          fi
-          sudo pkill -f openvpn
 
       - name: Measure Speed After VPN Stop
         run: |
