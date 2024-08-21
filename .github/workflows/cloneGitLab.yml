@@ -46,7 +46,7 @@ jobs:
           path: GoSELL-Automation
 
   build-and-test:
-    needs: clone
+    needs: clone-git
     runs-on: ubuntu-20.04
 
     steps:
