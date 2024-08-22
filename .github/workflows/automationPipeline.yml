@@ -152,6 +152,35 @@ jobs:
       test_name: "Android-GoSELLER-ProductManagement"
       test_config: "test_config/android/seller/productManagementTest.xml"
 
+  IOS-GoSELLER-CreateProduct:
+    needs: CloneGit
+    if: always()
+    uses: ./.github/workflows/iosAppiumConfigs.yml
+    with:
+      appium_port: 4726
+      test_name: "IOS-GoSELLER-CreateProduct"
+      test_config: "test_config/iOS/seller/createProductTest.xml"
+
+  IOS-GoSELLER-UpdateProduct:
+    needs: CloneGit
+    if: always()
+    uses: ./.github/workflows/iosAppiumConfigs.yml
+    with:
+      appium_port: 4727
+      test_name: "IOS-GoSELLER-UpdateProduct"
+      test_config: "test_config/iOS/seller/editProductTest.xml"
+
+  IOS-GoSELLER-ProductManagement:
+    needs:
+      - IOS-GoSELLER-CreateProduct
+      - IOS-GoSELLER-UpdateProduct
+    if: always()
+    uses: ./.github/workflows/iosAppiumConfigs.yml
+    with:
+      appium_port: 4728
+      test_name: "IOS-GoSELLER-ProductManagement"
+      test_config: "test_config/iOS/seller/productManagementTest.xml"
+
 
   CleanJob:
     runs-on: ubuntu-20.04

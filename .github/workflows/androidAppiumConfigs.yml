@@ -14,15 +14,30 @@ on:
 
 jobs:
   Android-Job:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - apiLevel: 32
+            emuTag: google_apis
+            arch: x86_64
+
     env:
-      API_LEVEL: 32
-      EMU_TAG: google_apis
-      ARCH: x86_64
+      ANDROID_AVD: emulator
+      APPIUM_TEST_SERVER_HOST: 0.0.0.0
 
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-        name: Checkout code
+      - name: Download artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: ClonedRepository
+          path: GoSELL-Automation
+
+      - name: Switch to another branch
+        run: |
+          cd GoSELL-Automation
+          git checkout GoSELL-Thang
 
       - uses: actions/setup-node@v3
         with:
@@ -33,6 +48,7 @@ jobs:
       - run: |
           npm install -g appium
         name: Install appium
+
       - uses: actions/setup-java@v3
         with:
           distribution: 'temurin'
@@ -51,9 +67,9 @@ jobs:
           path: |
             $HOME/.android/cache
             $HOME/Android/Sdk
-          key: android-sdk-$API_LEVEL
+          key: android-sdk-${{ matrix.apiLevel }}
           restore-keys: |
-            android-sdk-$API_LEVEL
+            android-sdk-${{ matrix.apiLevel }}
 
       - name: Cache Maven packages
         uses: actions/cache@v3
@@ -77,19 +93,19 @@ jobs:
           path: |
             ~/.android/avd/*
             ~/.android/adb*
-          key: avd-$API_LEVEL
+          key: avd-${{ matrix.apiLevel }}-${{ env.ANDROID_PORT }}
 
       - name: Create AVD and generate snapshot for caching
         if: steps.avd-cache.outputs.cache-hit != 'true'
         uses: reactivecircus/android-emulator-runner@v2
         with:
-          avd-name: emulator
+          avd-name: ${{ env.ANDROID_AVD }}
           force-avd-creation: false
-          api-level: $API_LEVEL
+          api-level: ${{ matrix.apiLevel }}
           disable-spellchecker: true
-          target: $EMU_TAG
+          target: ${{ matrix.emuTag }}
           emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim
-          arch: $ARCH
+          arch: ${{ matrix.arch }}
           disable-animations: true
           script: echo "Generated AVD snapshot for caching."
 
@@ -97,25 +113,27 @@ jobs:
         run: |
           appium driver install uiautomator2
           appium driver doctor uiautomator2
-          nohup appium -a 0.0.0.0 -p ${{ inputs.appium_port }} -pa /wd/hub > appium_log.txt 2>&1 &
+          nohup appium -a $APPIUM_TEST_SERVER_HOST -p ${{ inputs.appium_port }} -pa /wd/hub > appium_log.txt 2>&1 &
           tail -f appium_log.txt &
 
       - name: Install dependencies
         run: |
+          cd GoSELL-Automation
           mvn install -DskipTests
 
       - name: Run Appium tests with Maven
         uses: reactivecircus/android-emulator-runner@v2
         with:
           script: |
+            cd GoSELL-Automation
             mvn test "-DsuiteFile=${{ inputs.test_config }}" "-Dudid=emulator-5554" "-DappiumPort=${{ inputs.appium_port }}"
-          avd-name: emulator
+          avd-name: ${{ env.ANDROID_AVD }}
           force-avd-creation: false
-          api-level: $API_LEVEL
+          api-level: ${{ matrix.apiLevel }}
           disable-spellchecker: true
-          target: $EMU_TAG
+          target: ${{ matrix.emuTag }}
           emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim
-          arch: $ARCH
+          arch: ${{ matrix.arch }}
           disable-animations: true
 
       - name: Upload all recording .mp4 files
@@ -135,3 +153,8 @@ jobs:
             **/reportng.css
             **/reportng.js
             **/suite*_test*_results.html
+
+      - name: Remove cloned repo
+        if: always()
+        run: |
+          rm -r GoSELL-Automation
