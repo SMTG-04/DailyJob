@@ -38,6 +38,7 @@ jobs:
         run: |
           sudo nohup openvpn --verb 4 --config $(pwd)/${{ secrets.VPN_OVPN }} --auth-user-pass $(pwd)/${{ secrets.VPN_AUTHOR }} > $HOME/openvpn.log 2>&1 &
           sleep 10
+          cat $HOME/openvpn.log
 
       - name: Clone GitLab repository
         run: |
