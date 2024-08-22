@@ -6,7 +6,7 @@ on:
       - main
 
 jobs:
-  clone-git:
+  clone-git-then-build-test:
     runs-on: ubuntu-20.04
 
     steps:
@@ -45,39 +45,10 @@ jobs:
         run: |
           sudo pkill -f openvpn
 
-      - name: Save cloned repo as artifact
-        uses: actions/upload-artifact@v3
-        with:
-          name: GoSELL-Automation
-          path: GoSELL-Automation
-
-      - name: Remove cloned repo
-        run: rm -r GoSELL-Automation
-
-  build-and-test:
-    needs: clone-git
-    runs-on: macos-14
-
-    steps:
-      - name: Download Git-Automation artifact
-        uses: actions/download-artifact@v3
-        with:
-          name: GoSELL-Automation
-          path: GoSELL-Automation
-
-      - name: Create a empty folder
-        run: mkdir nothing-in-here
-
-      - name: Override Git-Automation artifact
-        uses: actions/download-artifact@v3
-        with:
-          name: GoSELL-Automation
-          path: nothing-in-here
-
       - name: Switch to main
         run: |
           cd GoSELL-Automation
-          git checkout main
+          git checkout GoSELL-Thang
 
       - name: Set up Java
         uses: actions/setup-java@v3
@@ -86,10 +57,7 @@ jobs:
           distribution: 'adopt'
 
       - name: Install FFmpeg
-        run: brew install ffmpeg
-
-      - name: Verify FFmpeg Installation
-        run: ffmpeg -version
+        run: sudo apt-get update && sudo apt-get install -y ffmpeg
 
       - name: Cache Maven packages
         uses: actions/cache@v3
@@ -98,6 +66,14 @@ jobs:
           key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
           restore-keys: |
             ${{ runner.os }}-maven-
+
+      - name: Cache Maven packages
+        uses: actions/cache@v3
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-ubuntu }}
+          restore-keys: |
+            ${{ runner.os }}-maven-ubuntu
 
       - name: Install dependencies
         run: |
