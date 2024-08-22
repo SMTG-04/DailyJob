@@ -207,7 +207,7 @@ jobs:
   Dashboard-ProductManagement:
     runs-on: ubuntu-20.04
     needs: [ Dashboard-CreateProduct, Dashboard-UpdateProduct ]
-
+    if: always()
     steps:
       - name: Download artifact
         uses: actions/download-artifact@v4
@@ -399,7 +399,7 @@ jobs:
       - name: Run tests
         run: |
           cd GoSELL-Automation
-          run: mvn --batch-mode test "-DsuiteFile=test_config/web/productDetail_IMEI_withoutVariation.xml"
+          mvn --batch-mode test "-DsuiteFile=test_config/web/productDetail_IMEI_withoutVariation.xml"
 
       - name: Upload all recording .mp4 files
         if: always()
@@ -422,6 +422,7 @@ jobs:
       - name: Remove cloned repo
         run: |
           rm -r GoSELL-Automation
+
   Storefront-ProductDetail-NormalxVariation:
     runs-on: ubuntu-20.04
     needs: CloneGit
@@ -471,7 +472,7 @@ jobs:
       - name: Run tests
         run: |
           cd GoSELL-Automation
-          run: mvn --batch-mode test "-DsuiteFile=test_config/web/productDetail_Normal_Variation.xml"
+          mvn --batch-mode test "-DsuiteFile=test_config/web/productDetail_Normal_Variation.xml"
 
       - name: Upload all recording .mp4 files
         if: always()
@@ -544,7 +545,7 @@ jobs:
       - name: Run tests
         run: |
           cd GoSELL-Automation
-          run: mvn --batch-mode test "-DsuiteFile=test_config/web/productDetail_IMEI_Variation.xml"
+          mvn --batch-mode test "-DsuiteFile=test_config/web/productDetail_IMEI_Variation.xml"
 
       - name: Upload all recording .mp4 files
         if: always()
@@ -571,7 +572,7 @@ jobs:
   Storefront-ProductDetail-Promotion:
     runs-on: ubuntu-20.04
     needs: [ Storefront-ProductDetail-NormalxWithoutVariation, Storefront-ProductDetail-IMEIxWithoutVariation, Storefront-ProductDetail-NormalxVariation, Storefront-ProductDetail-IMEIxVariation ]
-
+    if: always()
     steps:
       - name: Download artifact
         uses: actions/download-artifact@v4
@@ -644,6 +645,7 @@ jobs:
   CleanJob:
     runs-on: ubuntu-20.04
     needs: [ Dashboard-ProductManagement, Storefront-ProductDetail-Promotion ]
+    if: always()
     steps:
       - name: Delete clone repository
         uses: geekyeggo/delete-artifact@v5
