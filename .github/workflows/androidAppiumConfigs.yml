@@ -15,9 +15,9 @@ on:
 jobs:
   Android-Job:
     env:
-      apiLevel: 32
-      emuTag: google_apis
-      arch: x86_64
+      API_LEVEL: 32
+      EMU_TAG: google_apis
+      ARCH: x86_64
 
     runs-on: ubuntu-latest
     steps:
@@ -51,9 +51,9 @@ jobs:
           path: |
             $HOME/.android/cache
             $HOME/Android/Sdk
-          key: android-sdk-$apiLevel
+          key: android-sdk-$API_LEVEL
           restore-keys: |
-            android-sdk-$apiLevel
+            android-sdk-$API_LEVEL
 
       - name: Cache Maven packages
         uses: actions/cache@v3
@@ -77,7 +77,7 @@ jobs:
           path: |
             ~/.android/avd/*
             ~/.android/adb*
-          key: avd-$apiLevel
+          key: avd-$API_LEVEL
 
       - name: Create AVD and generate snapshot for caching
         if: steps.avd-cache.outputs.cache-hit != 'true'
@@ -85,11 +85,11 @@ jobs:
         with:
           avd-name: emulator
           force-avd-creation: false
-          api-level: $apiLevel
+          api-level: $API_LEVEL
           disable-spellchecker: true
-          target: $emuTag
+          target: $EMU_TAG
           emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim
-          arch: $arch
+          arch: $ARCH
           disable-animations: true
           script: echo "Generated AVD snapshot for caching."
 
@@ -111,11 +111,11 @@ jobs:
             mvn test "-DsuiteFile=${{ inputs.test_config }}" "-Dudid=emulator-5554" "-DappiumPort=${{ inputs.appium_port }}"
           avd-name: emulator
           force-avd-creation: false
-          api-level: $apiLevel
+          api-level: $API_LEVEL
           disable-spellchecker: true
-          target: $emuTag
+          target: $EMU_TAG
           emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim
-          arch: $arch
+          arch: $ARCH
           disable-animations: true
 
       - name: Upload all recording .mp4 files
