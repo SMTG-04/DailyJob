@@ -150,7 +150,8 @@ jobs:
         with:
           name: random-file
 
-      - name: Delete Uploaded File
-        uses: actions/delete-artifact@v3
+      - name: Upload File
+        uses: actions/upload-artifact@v3
         with:
           name: random-file
+          path: /nothing-in-here
