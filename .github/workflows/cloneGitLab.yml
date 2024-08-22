@@ -62,8 +62,10 @@ jobs:
           name: GoSELL-Automation
           path: GoSELL-Automation
 
-      - name: Override Git-Automation artifact
+      - name: Create a empty folder
         run: mkdir nothing-in-here
+
+      - name: Override Git-Automation artifact
         uses: actions/download-artifact@v3
         with:
           name: GoSELL-Automation
