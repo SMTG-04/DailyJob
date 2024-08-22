@@ -37,8 +37,19 @@ jobs:
       - name: Start OpenVPN
         run: |
           sudo nohup openvpn --verb 4 --config $(pwd)/${{ secrets.VPN_OVPN }} --auth-user-pass $(pwd)/${{ secrets.VPN_AUTHOR }} > $HOME/openvpn.log 2>&1 &
-          sleep 10
-          cat $HOME/openvpn.log
+
+      - name: Try connect to Gitlab by VPN
+        run: |
+          for i in {1..5}; do
+           echo "$(curl -Is ${{ secrets.GITLAB_HOST }} | head -1)"
+           cat $HOME/openvpn.log
+           if grep -q "Initialization Sequence Completed" $HOME/openvpn.log; then
+             echo "OpenVPN started successfully."
+             break
+           fi
+           echo "OpenVPN start failed, retrying..."
+          done
+        if: success()
 
       - name: Measure Speed After Start VPN
         run: |
@@ -47,27 +58,7 @@ jobs:
 
       - name: Clone GitLab repository
         run: |
-          MAX_ATTEMPTS=3
-          while [[ $ATTEMPT -le $MAX_ATTEMPTS ]]; do
-            if curl -s --head --fail https://git.mediastep.com; then
-              git clone ${{ secrets.GITLAB_REPOSITORY }} GoSELL-Automation
-              if [ $? -eq 0 ]; then
-                echo "Git clone successful (attempt $ATTEMPT)"
-                git log -1
-                break
-              else
-                echo "Git clone failed (attempt $ATTEMPT). Retrying..."
-              fi
-            else
-              echo "Connection to git.mediastep.com failed (attempt $ATTEMPT). Retrying..."
-            fi
-            ((ATTEMPT++))
-            sleep 30
-          done
-
-          if [[ $ATTEMPT -gt $MAX_ATTEMPTS ]]; then
-            echo "Git clone failed after $MAX_ATTEMPTS attempts."
-          fi
+          git clone ${{ secrets.GITLAB_REPOSITORY }} GoSELL-Automation
 
       - name: Stop OpenVPN
         run: |
