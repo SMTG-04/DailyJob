@@ -51,6 +51,9 @@ jobs:
           name: GoSELL-Automation
           path: GoSELL-Automation
 
+      - name: Remove artifact
+        run: rmdir GoSELL-Automation
+
   build-and-test:
     needs: clone-git
     runs-on: macos-14
@@ -123,3 +126,7 @@ jobs:
             **/reportng.css
             **/reportng.js
             **/suite*_test*_results.html
+
+      - name: Remove artifact
+        run: |
+          rmdir GoSELL-Automation
