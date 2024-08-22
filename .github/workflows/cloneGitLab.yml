@@ -38,7 +38,7 @@ jobs:
               break
             fi
             echo "OpenVPN start failed, retrying..."
-            sudo pkill -f openvpn
+            killall openvpn
           done
 
       - name: Clone GitLab repository
