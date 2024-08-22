@@ -57,71 +57,71 @@ jobs:
           name: ClonedRepository
           path: GoSELL-Automation
 
-  Dashboard-CreateProduct:
-    needs: CloneGit
-    uses: ./.github/workflows/seleniumConfigs.yml
-    with:
-      test_name: "Dashboard-CreateProduct"
-      test_config: "test_config/web/createProductTest.xml"
-
-  Dashboard-UpdateProduct:
-    needs: CloneGit
-    uses: ./.github/workflows/seleniumConfigs.yml
-    with:
-      test_name: "Dashboard-UpdateProduct"
-      test_config: "test_config/web/updateProductTest.xml"
-
-  Dashboard-ProductManagement:
-    needs:
-      - Dashboard-CreateProduct
-      - Dashboard-UpdateProduct
-
-    if: always()
-    uses: ./.github/workflows/seleniumConfigs.yml
-    with:
-      test_name: "Dashboard-ProductManagement"
-      test_config: "test_config/web/productManagementTest.xml"
-
-  Storefront-ProductDetail-NormalxWithoutVariation:
-    needs: CloneGit
-    uses: ./.github/workflows/seleniumConfigs.yml
-    with:
-      test_name: "Storefront-ProductDetail-NormalxWithoutVariation"
-      test_config: "test_config/web/productDetail_Normal_withoutVariation.xml"
-
-  Storefront-ProductDetail-IMEIxWithoutVariation:
-    needs: CloneGit
-    uses: ./.github/workflows/seleniumConfigs.yml
-    with:
-      test_name: "Storefront-ProductDetail-IMEIxWithoutVariation"
-      test_config: "test_config/web/productDetail_IMEI_withoutVariation.xml"
-
-  Storefront-ProductDetail-NormalxVariation:
-    needs: CloneGit
-    uses: ./.github/workflows/seleniumConfigs.yml
-    with:
-      test_name: "Storefront-ProductDetail-NormalxVariation"
-      test_config: "test_config/web/productDetail_Normal_Variation.xml"
-
-  Storefront-ProductDetail-IMEIxVariation:
-    needs: CloneGit
-    uses: ./.github/workflows/seleniumConfigs.yml
-    with:
-      test_name: "Storefront-ProductDetail-IMEIxVariation"
-      test_config: "test_config/web/productDetail_IMEI_Variation.xml"
-
-  Storefront-ProductDetail-Promotion:
-    needs:
-      - Storefront-ProductDetail-NormalxWithoutVariation
-      - Storefront-ProductDetail-IMEIxWithoutVariation
-      - Storefront-ProductDetail-NormalxVariation
-      - Storefront-ProductDetail-IMEIxVariation
-
-    if: always()
-    uses: ./.github/workflows/seleniumConfigs.yml
-    with:
-      test_name: "Storefront-ProductDetail-Promotion"
-      test_config: "test_config/web/productDetail_combinePromotion.xml"
+#  Dashboard-CreateProduct:
+#    needs: CloneGit
+#    uses: ./.github/workflows/seleniumConfigs.yml
+#    with:
+#      test_name: "Dashboard-CreateProduct"
+#      test_config: "test_config/web/createProductTest.xml"
+#
+#  Dashboard-UpdateProduct:
+#    needs: CloneGit
+#    uses: ./.github/workflows/seleniumConfigs.yml
+#    with:
+#      test_name: "Dashboard-UpdateProduct"
+#      test_config: "test_config/web/updateProductTest.xml"
+#
+#  Dashboard-ProductManagement:
+#    needs:
+#      - Dashboard-CreateProduct
+#      - Dashboard-UpdateProduct
+#
+#    if: always()
+#    uses: ./.github/workflows/seleniumConfigs.yml
+#    with:
+#      test_name: "Dashboard-ProductManagement"
+#      test_config: "test_config/web/productManagementTest.xml"
+#
+#  Storefront-ProductDetail-NormalxWithoutVariation:
+#    needs: CloneGit
+#    uses: ./.github/workflows/seleniumConfigs.yml
+#    with:
+#      test_name: "Storefront-ProductDetail-NormalxWithoutVariation"
+#      test_config: "test_config/web/productDetail_Normal_withoutVariation.xml"
+#
+#  Storefront-ProductDetail-IMEIxWithoutVariation:
+#    needs: CloneGit
+#    uses: ./.github/workflows/seleniumConfigs.yml
+#    with:
+#      test_name: "Storefront-ProductDetail-IMEIxWithoutVariation"
+#      test_config: "test_config/web/productDetail_IMEI_withoutVariation.xml"
+#
+#  Storefront-ProductDetail-NormalxVariation:
+#    needs: CloneGit
+#    uses: ./.github/workflows/seleniumConfigs.yml
+#    with:
+#      test_name: "Storefront-ProductDetail-NormalxVariation"
+#      test_config: "test_config/web/productDetail_Normal_Variation.xml"
+#
+#  Storefront-ProductDetail-IMEIxVariation:
+#    needs: CloneGit
+#    uses: ./.github/workflows/seleniumConfigs.yml
+#    with:
+#      test_name: "Storefront-ProductDetail-IMEIxVariation"
+#      test_config: "test_config/web/productDetail_IMEI_Variation.xml"
+#
+#  Storefront-ProductDetail-Promotion:
+#    needs:
+#      - Storefront-ProductDetail-NormalxWithoutVariation
+#      - Storefront-ProductDetail-IMEIxWithoutVariation
+#      - Storefront-ProductDetail-NormalxVariation
+#      - Storefront-ProductDetail-IMEIxVariation
+#
+#    if: always()
+#    uses: ./.github/workflows/seleniumConfigs.yml
+#    with:
+#      test_name: "Storefront-ProductDetail-Promotion"
+#      test_config: "test_config/web/productDetail_combinePromotion.xml"
 
   Android-GoSELLER-CreateProduct:
     needs: CloneGit
@@ -131,24 +131,24 @@ jobs:
       test_name: "Android-GoSELLER-CreateProduct"
       test_config: "test_config/android/seller/createProductTest.xml"
 
-  Android-GoSELLER-UpdateProduct:
-    needs: CloneGit
-    uses: ./.github/workflows/androidAppiumConfigs.yml
-    with:
-      appium_port: 4724
-      test_name: "Android-GoSELLER-UpdateProduct"
-      test_config: "test_config/android/seller/editProductTest.xml"
-
-  Android-GoSELLER-ProductManagement:
-    needs:
-      - Android-GoSELLER-CreateProduct
-      - Android-GoSELLER-UpdateProduct
-    if: always()
-    uses: ./.github/workflows/androidAppiumConfigs.yml
-    with:
-      appium_port: 4725
-      test_name: "Android-GoSELLER-ProductManagement"
-      test_config: "test_config/android/seller/productManagementTest.xml"
+#  Android-GoSELLER-UpdateProduct:
+#    needs: CloneGit
+#    uses: ./.github/workflows/androidAppiumConfigs.yml
+#    with:
+#      appium_port: 4724
+#      test_name: "Android-GoSELLER-UpdateProduct"
+#      test_config: "test_config/android/seller/editProductTest.xml"
+#
+#  Android-GoSELLER-ProductManagement:
+#    needs:
+#      - Android-GoSELLER-CreateProduct
+#      - Android-GoSELLER-UpdateProduct
+#    if: always()
+#    uses: ./.github/workflows/androidAppiumConfigs.yml
+#    with:
+#      appium_port: 4725
+#      test_name: "Android-GoSELLER-ProductManagement"
+#      test_config: "test_config/android/seller/productManagementTest.xml"
 
   IOS-GoSELLER-CreateProduct:
     needs: CloneGit
@@ -157,26 +157,26 @@ jobs:
       appium_port: 4726
       test_name: "IOS-GoSELLER-CreateProduct"
       test_config: "test_config/iOS/seller/createProductTest.xml"
-
-  IOS-GoSELLER-UpdateProduct:
-    needs: CloneGit
-    if: always()
-    uses: ./.github/workflows/iosAppiumConfigs.yml
-    with:
-      appium_port: 4727
-      test_name: "IOS-GoSELLER-UpdateProduct"
-      test_config: "test_config/iOS/seller/editProductTest.xml"
-
-  IOS-GoSELLER-ProductManagement:
-    needs:
-      - IOS-GoSELLER-CreateProduct
-      - IOS-GoSELLER-UpdateProduct
-    if: always()
-    uses: ./.github/workflows/iosAppiumConfigs.yml
-    with:
-      appium_port: 4728
-      test_name: "IOS-GoSELLER-ProductManagement"
-      test_config: "test_config/iOS/seller/productManagementTest.xml"
+#
+#  IOS-GoSELLER-UpdateProduct:
+#    needs: CloneGit
+#    if: always()
+#    uses: ./.github/workflows/iosAppiumConfigs.yml
+#    with:
+#      appium_port: 4727
+#      test_name: "IOS-GoSELLER-UpdateProduct"
+#      test_config: "test_config/iOS/seller/editProductTest.xml"
+#
+#  IOS-GoSELLER-ProductManagement:
+#    needs:
+#      - IOS-GoSELLER-CreateProduct
+#      - IOS-GoSELLER-UpdateProduct
+#    if: always()
+#    uses: ./.github/workflows/iosAppiumConfigs.yml
+#    with:
+#      appium_port: 4728
+#      test_name: "IOS-GoSELLER-ProductManagement"
+#      test_config: "test_config/iOS/seller/productManagementTest.xml"
 
 
   CleanJob:

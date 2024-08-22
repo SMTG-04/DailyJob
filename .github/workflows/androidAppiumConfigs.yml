@@ -71,14 +71,6 @@ jobs:
           restore-keys: |
             android-sdk-${{ matrix.apiLevel }}
 
-      - name: Cache Maven packages
-        uses: actions/cache@v3
-        with:
-          path: ~/.m2/repository
-          key: ${{ runner.os }}-maven-ubuntu
-          restore-keys: |
-            ${{ runner.os }}-maven-ubuntu
-
       - name: Cache npm modules
         uses: actions/cache@v3
         with:
@@ -115,6 +107,14 @@ jobs:
           appium driver doctor uiautomator2
           nohup appium -a $APPIUM_TEST_SERVER_HOST -p ${{ inputs.appium_port }} -pa /wd/hub > appium_log.txt 2>&1 &
           tail -f appium_log.txt &
+
+      - name: Cache Maven packages
+        uses: actions/cache@v3
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-ubuntu
+          restore-keys: |
+            ${{ runner.os }}-maven-ubuntu
 
       - name: Install dependencies
         run: |

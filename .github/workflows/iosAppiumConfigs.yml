@@ -107,8 +107,18 @@ jobs:
           nohup appium -a 0.0.0.0 -p ${{ inputs.appium_port }} -pa /wd/hub > appium_log.txt 2>&1 &
           tail -f appium_log.txt &
 
+      - name: Cache Maven packages
+        uses: actions/cache@v3
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-macos
+          restore-keys: |
+            ${{ runner.os }}-maven-macos
+
       - name: Install dependencies
-        run: mvn install -DskipTests
+        run: |
+          cd GoSELL-Automation
+          mvn install -DskipTests
 
       - name: Run Tests
         run: mvn test "-DsuiteFile=${{ inputs.test_config }}" "-DudidIOS=$DEVICE_UDID" "-DappiumPort=${{ inputs.appium_port }}"
