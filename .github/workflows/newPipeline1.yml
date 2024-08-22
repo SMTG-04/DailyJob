@@ -1,0 +1,126 @@
+name: Pipeline1
+
+on:
+  push:
+    branches:
+      - main
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  CloneGit:
+    runs-on: ubuntu-20.04
+
+    steps:
+      - name: Checkout the current repository
+        uses: actions/checkout@v2
+
+      - name: Install OpenVPN
+        run: |
+          sudo apt update -y
+          sudo apt install -y openvpn
+
+      - name: Create VPN Credentials File
+        run: |
+          echo "${{ secrets.VPN_USERNAME }}" > ${{ secrets.VPN_AUTHOR }}
+          echo "${{ secrets.VPN_PASSWORD }}" >> ${{ secrets.VPN_AUTHOR }}
+          chmod 600 ${{ secrets.VPN_AUTHOR }}
+
+      - name: Start OpenVPN
+        run: |
+          sudo nohup openvpn --verb 4 --config $(pwd)/${{ secrets.VPN_OVPN }} --auth-user-pass $(pwd)/${{ secrets.VPN_AUTHOR }} > $HOME/openvpn.log 2>&1 &
+
+      - name: Try connect to Gitlab by VPN
+        run: |
+          for i in {1..5}; do
+           echo "$(curl -Is ${{ secrets.GITLAB_HOST }} | head -1)"
+           if grep -q "Initialization Sequence Completed" $HOME/openvpn.log; then
+             echo "OpenVPN started successfully."
+             break
+           fi
+           echo "OpenVPN start failed, retrying..."
+          done
+          cat $HOME/openvpn.log
+
+      - name: Clone GitLab repository
+        run: |
+          git clone ${{ secrets.GITLAB_REPOSITORY }} GoSELL-Automation
+
+      - name: Stop OpenVPN
+        run: |
+          sudo pkill -f openvpn
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ClonedRepository
+          path: GoSELL-Automation
+
+  Dashboard-CreateProduct:
+    needs: CloneGit
+    uses: ./.github/workflows/seleniumConfigs.yml
+    with:
+      job_name: "${{ github.job }}"
+      job_config: "test_config/web/createProductTest.xml"
+
+  Dashboard-UpdateProduct:
+    needs: CloneGit
+    uses: ./.github/workflows/seleniumConfigs.yml
+    with:
+      job_name: "${{ github.job }}"
+      job_config: "test_config/web/updateProductTest.xml"
+
+  Dashboard-ProductManagement:
+    needs: [ Dashboard-CreateProduct, Dashboard-UpdateProduct ]
+    if: always()
+    uses: ./.github/workflows/seleniumConfigs.yml
+    with:
+      job_name: "${{ github.job }}"
+      job_config: "test_config/web/productManagementTest.xml"
+
+  Storefront-ProductDetail-NormalxWithoutVariation:
+    needs: CloneGit
+    uses: ./.github/workflows/seleniumConfigs.yml
+    with:
+      job_name: "${{ github.job }}"
+      job_config: "test_config/web/productDetail_Normal_withoutVariation.xml"
+
+  Storefront-ProductDetail-IMEIxWithoutVariation:
+    needs: CloneGit
+    uses: ./.github/workflows/seleniumConfigs.yml
+    with:
+      job_name: "${{ github.job }}"
+      job_config: "test_config/web/productDetail_IMEI_withoutVariation.xml"
+
+  Storefront-ProductDetail-NormalxVariation:
+    needs: CloneGit
+    uses: ./.github/workflows/seleniumConfigs.yml
+    with:
+      job_name: "${{ github.job }}"
+      job_config: "test_config/web/productDetail_Normal_Variation.xml"
+
+  Storefront-ProductDetail-IMEIxVariation:
+    needs: CloneGit
+    uses: ./.github/workflows/seleniumConfigs.yml
+    with:
+      job_name: "${{ github.job }}"
+      job_config: "test_config/web/productDetail_IMEI_Variation.xml"
+
+  Storefront-ProductDetail-Promotion:
+    needs: [ Storefront-ProductDetail-NormalxWithoutVariation, Storefront-ProductDetail-IMEIxWithoutVariation, Storefront-ProductDetail-NormalxVariation, Storefront-ProductDetail-IMEIxVariation ]
+    if: always()
+    uses: ./.github/workflows/seleniumConfigs.yml
+    with:
+      job_name: "${{ github.job }}"
+      job_config: "test_config/web/productDetail_combinePromotion.xml"
+
+  CleanJob:
+    runs-on: ubuntu-20.04
+    needs: [ Dashboard-ProductManagement, Storefront-ProductDetail-Promotion ]
+    if: always()
+    steps:
+      - name: Delete clone repository
+        uses: geekyeggo/delete-artifact@v5
+        with:
+          name: ClonedRepository
