@@ -111,7 +111,7 @@ jobs:
         run: mvn install -DskipTests
 
       - name: Run Tests
-        run: mvn test "-DsuiteFile=${{ inputs.test_config }}" "-Dudid=$DEVICE_UDID" "-DappiumPort=${{ inputs.appium_port }}"
+        run: mvn test "-DsuiteFile=${{ inputs.test_config }}" "-DudidIOS=$DEVICE_UDID" "-DappiumPort=${{ inputs.appium_port }}"
 
       - name: Upload all recording .mp4 files
         if: always()

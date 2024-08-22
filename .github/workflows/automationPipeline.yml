@@ -125,7 +125,6 @@ jobs:
 
   Android-GoSELLER-CreateProduct:
     needs: CloneGit
-    if: always()
     uses: ./.github/workflows/androidAppiumConfigs.yml
     with:
       appium_port: 4723
@@ -134,7 +133,6 @@ jobs:
 
   Android-GoSELLER-UpdateProduct:
     needs: CloneGit
-    if: always()
     uses: ./.github/workflows/androidAppiumConfigs.yml
     with:
       appium_port: 4724
@@ -154,7 +152,6 @@ jobs:
 
   IOS-GoSELLER-CreateProduct:
     needs: CloneGit
-    if: always()
     uses: ./.github/workflows/iosAppiumConfigs.yml
     with:
       appium_port: 4726
