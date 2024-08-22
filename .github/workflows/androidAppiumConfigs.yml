@@ -119,14 +119,13 @@ jobs:
       - name: Install dependencies
         run: |
           cd GoSELL-Automation
-          mvn install -DskipTests
+          mvn install "-f GoSELL-Automation/pom.xml" -DskipTests
 
       - name: Run Appium tests with Maven
         uses: reactivecircus/android-emulator-runner@v2
         with:
           script: |
-            cd GoSELL-Automation
-            mvn test "-DsuiteFile=${{ inputs.test_config }}" "-DudidAndroid=emulator-5554" "-DappiumPort=${{ inputs.appium_port }}"
+            mvn test "-f GoSELL-Automation/pom.xml" "-DsuiteFile=${{ inputs.test_config }}" "-DudidAndroid=emulator-5554" "-DappiumPort=${{ inputs.appium_port }}"
           avd-name: ${{ env.ANDROID_AVD }}
           force-avd-creation: false
           api-level: ${{ matrix.apiLevel }}
