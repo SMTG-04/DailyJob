@@ -61,14 +61,14 @@ jobs:
     needs: CloneGit
     uses: ./.github/workflows/seleniumConfigs.yml
     with:
-      test_name: "${{ github.job }}"
+      test_name: "Dashboard-CreateProduct"
       test_config: "test_config/web/createProductTest.xml"
 
   Dashboard-UpdateProduct:
     needs: CloneGit
     uses: ./.github/workflows/seleniumConfigs.yml
     with:
-      test_name: "${{ github.job }}"
+      test_name: "Dashboard-UpdateProduct"
       test_config: "test_config/web/updateProductTest.xml"
 
   Dashboard-ProductManagement:
@@ -79,35 +79,35 @@ jobs:
     if: always()
     uses: ./.github/workflows/seleniumConfigs.yml
     with:
-      test_name: "${{ github.job }}"
+      test_name: "Dashboard-ProductManagement"
       test_config: "test_config/web/productManagementTest.xml"
 
   Storefront-ProductDetail-NormalxWithoutVariation:
     needs: CloneGit
     uses: ./.github/workflows/seleniumConfigs.yml
     with:
-      test_name: "${{ github.job }}"
+      test_name: "Storefront-ProductDetail-NormalxWithoutVariation"
       test_config: "test_config/web/productDetail_Normal_withoutVariation.xml"
 
   Storefront-ProductDetail-IMEIxWithoutVariation:
     needs: CloneGit
     uses: ./.github/workflows/seleniumConfigs.yml
     with:
-      test_name: "${{ github.job }}"
+      test_name: "Storefront-ProductDetail-IMEIxWithoutVariation"
       test_config: "test_config/web/productDetail_IMEI_withoutVariation.xml"
 
   Storefront-ProductDetail-NormalxVariation:
     needs: CloneGit
     uses: ./.github/workflows/seleniumConfigs.yml
     with:
-      test_name: "${{ github.job }}"
+      test_name: "Storefront-ProductDetail-NormalxVariation"
       test_config: "test_config/web/productDetail_Normal_Variation.xml"
 
   Storefront-ProductDetail-IMEIxVariation:
     needs: CloneGit
     uses: ./.github/workflows/seleniumConfigs.yml
     with:
-      test_name: "${{ github.job }}"
+      test_name: "Storefront-ProductDetail-IMEIxVariation"
       test_config: "test_config/web/productDetail_IMEI_Variation.xml"
 
   Storefront-ProductDetail-Promotion:
@@ -120,7 +120,7 @@ jobs:
     if: always()
     uses: ./.github/workflows/seleniumConfigs.yml
     with:
-      test_name: "${{ github.job }}"
+      test_name: "Storefront-ProductDetail-Promotion"
       test_config: "test_config/web/productDetail_combinePromotion.xml"
 
   Android-GoSELLER-CreateProduct:
@@ -129,7 +129,7 @@ jobs:
     uses: ./.github/workflows/androidAppiumConfigs.yml
     with:
       appium_port: 4723
-      test_name: "${{ github.job }}"
+      test_name: "Android-GoSELLER-CreateProduct"
       test_config: "test_config/android/seller/createProductTest.xml"
 
   Android-GoSELLER-UpdateProduct:
@@ -138,7 +138,7 @@ jobs:
     uses: ./.github/workflows/androidAppiumConfigs.yml
     with:
       appium_port: 4724
-      test_name: "${{ github.job }}"
+      test_name: "Android-GoSELLER-UpdateProduct"
       test_config: "test_config/android/seller/editProductTest.xml"
 
   Android-GoSELLER-ProductManagement:
@@ -149,7 +149,7 @@ jobs:
     uses: ./.github/workflows/androidAppiumConfigs.yml
     with:
       appium_port: 4725
-      test_name: "${{ github.job }}"
+      test_name: "Android-GoSELLER-ProductManagement"
       test_config: "test_config/android/seller/productManagementTest.xml"
 
 
