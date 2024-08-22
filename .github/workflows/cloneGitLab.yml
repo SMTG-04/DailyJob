@@ -40,25 +40,41 @@ jobs:
           sleep 10
           cat $HOME/openvpn.log
 
+      - name: Measure Speed After Start VPN
+        run: |
+          speedtest-cli --json > $HOME/speedtest_after_start_vpn.json
+          cat $HOME/speedtest_after_start_vpn.json
+
       - name: Clone GitLab repository
         run: |
-          for i in {1..5}; do
-            git clone ${{ secrets.GITLAB_REPOSITORY }} GoSELL-Automation
-            if [ $? -eq 0 ]; then
-              echo "Git clone successful"
-              git log -1
+          MAX_ATTEMPTS=3
+          while [[ $ATTEMPT -le $MAX_ATTEMPTS ]]; do
+            if curl -s --head --fail https://git.mediastep.com; then
+              git clone ${{ secrets.GITLAB_REPOSITORY }} GoSELL-Automation
+              if [ $? -eq 0 ]; then
+                echo "Git clone successful (attempt $ATTEMPT)"
+                git log -1
+                break
+              else
+                echo "Git clone failed (attempt $ATTEMPT). Retrying..."
+              fi
             else
-              echo "Git clone failed"
+              echo "Connection to git.mediastep.com failed (attempt $ATTEMPT). Retrying..."
             fi
-            cat $HOME/openvpn.log
+            ((ATTEMPT++))
+            sleep 30
           done
+
+          if [[ $ATTEMPT -gt $MAX_ATTEMPTS ]]; then
+            echo "Git clone failed after $MAX_ATTEMPTS attempts."
+          fi
 
       - name: Stop OpenVPN
         run: |
           sudo pkill -f openvpn
 
       - name: Measure Speed After Stop VPN
-        run: |     
+        run: |
           speedtest-cli --json > $HOME/speedtest_after_stop_vpn.json
           cat $HOME/speedtest_after_stop_vpn.json
 
