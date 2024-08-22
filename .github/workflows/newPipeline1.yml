@@ -61,59 +61,59 @@ jobs:
     needs: CloneGit
     uses: ./.github/workflows/seleniumConfigs.yml
     with:
-      job_name: "${{ github.job }}"
-      job_config: "test_config/web/createProductTest.xml"
+      test_name: "${{ github.job }}"
+      test_config: "test_config/web/createProductTest.xml"
 
   Dashboard-UpdateProduct:
     needs: CloneGit
     uses: ./.github/workflows/seleniumConfigs.yml
     with:
-      job_name: "${{ github.job }}"
-      job_config: "test_config/web/updateProductTest.xml"
+      test_name: "${{ github.job }}"
+      test_config: "test_config/web/updateProductTest.xml"
 
   Dashboard-ProductManagement:
     needs: [ Dashboard-CreateProduct, Dashboard-UpdateProduct ]
     if: always()
     uses: ./.github/workflows/seleniumConfigs.yml
     with:
-      job_name: "${{ github.job }}"
-      job_config: "test_config/web/productManagementTest.xml"
+      test_name: "${{ github.job }}"
+      test_config: "test_config/web/productManagementTest.xml"
 
   Storefront-ProductDetail-NormalxWithoutVariation:
     needs: CloneGit
     uses: ./.github/workflows/seleniumConfigs.yml
     with:
-      job_name: "${{ github.job }}"
-      job_config: "test_config/web/productDetail_Normal_withoutVariation.xml"
+      test_name: "${{ github.job }}"
+      test_config: "test_config/web/productDetail_Normal_withoutVariation.xml"
 
   Storefront-ProductDetail-IMEIxWithoutVariation:
     needs: CloneGit
     uses: ./.github/workflows/seleniumConfigs.yml
     with:
-      job_name: "${{ github.job }}"
-      job_config: "test_config/web/productDetail_IMEI_withoutVariation.xml"
+      test_name: "${{ github.job }}"
+      test_config: "test_config/web/productDetail_IMEI_withoutVariation.xml"
 
   Storefront-ProductDetail-NormalxVariation:
     needs: CloneGit
     uses: ./.github/workflows/seleniumConfigs.yml
     with:
-      job_name: "${{ github.job }}"
-      job_config: "test_config/web/productDetail_Normal_Variation.xml"
+      test_name: "${{ github.job }}"
+      test_config: "test_config/web/productDetail_Normal_Variation.xml"
 
   Storefront-ProductDetail-IMEIxVariation:
     needs: CloneGit
     uses: ./.github/workflows/seleniumConfigs.yml
     with:
-      job_name: "${{ github.job }}"
-      job_config: "test_config/web/productDetail_IMEI_Variation.xml"
+      test_name: "${{ github.job }}"
+      test_config: "test_config/web/productDetail_IMEI_Variation.xml"
 
   Storefront-ProductDetail-Promotion:
     needs: [ Storefront-ProductDetail-NormalxWithoutVariation, Storefront-ProductDetail-IMEIxWithoutVariation, Storefront-ProductDetail-NormalxVariation, Storefront-ProductDetail-IMEIxVariation ]
     if: always()
     uses: ./.github/workflows/seleniumConfigs.yml
     with:
-      job_name: "${{ github.job }}"
-      job_config: "test_config/web/productDetail_combinePromotion.xml"
+      test_name: "${{ github.job }}"
+      test_config: "test_config/web/productDetail_combinePromotion.xml"
 
   CleanJob:
     runs-on: ubuntu-20.04
