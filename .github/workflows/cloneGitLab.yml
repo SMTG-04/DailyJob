@@ -52,7 +52,7 @@ jobs:
           path: GoSELL-Automation
 
       - name: Remove cloned repo
-        run: rmdir GoSELL-Automation
+        run: rm -r GoSELL-Automation
 
   build-and-test:
     needs: clone-git
@@ -129,4 +129,4 @@ jobs:
 
       - name: Remove cloned repo
         run: |
-          rmdir GoSELL-Automation
+          rm -r GoSELL-Automation
