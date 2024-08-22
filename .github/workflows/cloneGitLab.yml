@@ -63,10 +63,11 @@ jobs:
           path: GoSELL-Automation
 
       - name: Override Git-Automation artifact
+        run: mkdir nothing-in-here
         uses: actions/download-artifact@v3
         with:
           name: GoSELL-Automation
-          path: /nothing-in-here
+          path: nothing-in-here
 
       - name: Switch to main
         run: |
