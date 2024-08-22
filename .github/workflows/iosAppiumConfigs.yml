@@ -118,10 +118,12 @@ jobs:
       - name: Install dependencies
         run: |
           cd GoSELL-Automation
-          mvn install "-f GoSELL-Automation/pom.xml" -DskipTests
+          mvn install -DskipTests
 
       - name: Run Tests
-        run: mvn test "-f GoSELL-Automation/pom.xml" "-DsuiteFile=${{ inputs.test_config }}" "-DudidIOS=$DEVICE_UDID" "-DappiumPort=${{ inputs.appium_port }}"
+        run: |
+          cd GoSELL-Automation
+          mvn test "-DsuiteFile=${{ inputs.test_config }}" "-DudidIOS=$DEVICE_UDID" "-DappiumPort=${{ inputs.appium_port }}"
 
       - name: Upload all recording .mp4 files
         if: always()
