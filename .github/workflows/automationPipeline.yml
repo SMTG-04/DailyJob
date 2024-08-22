@@ -182,9 +182,12 @@ jobs:
   CleanJob:
     runs-on: ubuntu-20.04
     needs:
-      - Dashboard-ProductManagement
-      - Storefront-ProductDetail-Promotion
-      - Android-GoSELLER-ProductManagement
+      - IOS-GoSELLER-CreateProduct
+      - Android-GoSELLER-CreateProduct
+#      - Dashboard-ProductManagement
+#      - Storefront-ProductDetail-Promotion
+#      - Android-GoSELLER-ProductManagement
+#      - IOS-GoSELLER-ProductManagement
 
     if: always()
     steps:
