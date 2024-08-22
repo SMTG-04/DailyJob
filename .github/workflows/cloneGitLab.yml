@@ -45,7 +45,7 @@ jobs:
         run: |
           sudo pkill -f openvpn
 
-      - name: Switch to main
+      - name: Switch to another branch
         run: |
           cd GoSELL-Automation
           git checkout GoSELL-Thang
