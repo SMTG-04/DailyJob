@@ -14,9 +14,6 @@ on:
 
 jobs:
   Android-Job:
-    runs-on: ubuntu-latest
-
-  test:
     strategy:
       fail-fast: false
       matrix:
