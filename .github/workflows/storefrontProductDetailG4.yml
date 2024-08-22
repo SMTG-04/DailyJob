@@ -5,6 +5,10 @@ on:
     branches:
       - main
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
 jobs:
   clone-git-then-build-test:
     runs-on: ubuntu-20.04
@@ -12,16 +16,6 @@ jobs:
     steps:
       - name: Checkout the current repository
         uses: actions/checkout@v2
-
-      - name: Install Speedtest
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y openvpn speedtest-cli
-
-      - name: Measure Speed Before VPN
-        run: |
-          speedtest-cli --json > $HOME/speedtest_before_start_vpn.json
-          cat $HOME/speedtest_before_start_vpn.json
 
       - name: Install OpenVPN
         run: |
@@ -49,12 +43,6 @@ jobs:
            echo "OpenVPN start failed, retrying..."
           done
           cat $HOME/openvpn.log
-        if: success()
-
-      - name: Measure Speed After Start VPN
-        run: |
-          speedtest-cli --json > $HOME/speedtest_after_start_vpn.json
-          cat $HOME/speedtest_after_start_vpn.json
 
       - name: Clone GitLab repository
         run: |
@@ -63,11 +51,6 @@ jobs:
       - name: Stop OpenVPN
         run: |
           sudo pkill -f openvpn
-
-      - name: Measure Speed After Stop VPN
-        run: |
-          speedtest-cli --json > $HOME/speedtest_after_stop_vpn.json
-          cat $HOME/speedtest_after_stop_vpn.json
 
       - name: Switch to another branch
         run: |
