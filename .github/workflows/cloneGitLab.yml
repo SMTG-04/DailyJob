@@ -83,13 +83,10 @@ jobs:
           distribution: 'adopt'
 
       - name: Install FFmpeg
-        run: sudo apt-get update && sudo apt-get install -y ffmpeg
+        run: brew install ffmpeg
 
       - name: Verify FFmpeg Installation
         run: ffmpeg -version
-
-      - name: Install Carthage
-        run: brew install carthage
 
       - name: Cache Maven packages
         uses: actions/cache@v3
