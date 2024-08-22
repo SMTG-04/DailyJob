@@ -121,14 +121,23 @@ jobs:
           cd GoSELL-Automation
           mvn install -DskipTests
 
-      - name: Switch to test folder before execute
-        run: cd GoSELL-Automation
+      - name: Get test folder path
+        run: |
+          cd GoSELL-Automation
+          ABSOLUTE_PATH=$(pwd)
+          echo "The absolute path of the folder is: $ABSOLUTE_PATH"
+          echo "FOLDER_PATH=$ABSOLUTE_PATH" >> $GITHUB_ENV
+
+      - name: Check available file in folder
+        run: |
+          cd $FOLDER_PATH
+          ls -l
 
       - name: Run Appium tests with Maven
         uses: reactivecircus/android-emulator-runner@v2
         with:
           script: |
-            mvn test "-DsuiteFile=${{ inputs.test_config }}" "-DudidAndroid=emulator-5554" "-DappiumPort=${{ inputs.appium_port }}"
+            mvn test "-f $FOLDER_PATH/pom.xml" "-DsuiteFile=${{ inputs.test_config }}" "-DudidAndroid=emulator-5554" "-DappiumPort=${{ inputs.appium_port }}"
           avd-name: ${{ env.ANDROID_AVD }}
           force-avd-creation: false
           api-level: ${{ matrix.apiLevel }}
