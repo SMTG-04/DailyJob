@@ -179,19 +179,19 @@ jobs:
 #      test_config: "test_config/iOS/seller/productManagementTest.xml"
 
 
-#  CleanJob:
-#    runs-on: ubuntu-20.04
-#    needs:
-#      - IOS-GoSELLER-CreateProduct
-##      - Android-GoSELLER-CreateProduct
-##      - Dashboard-ProductManagement
-##      - Storefront-ProductDetail-Promotion
-##      - Android-GoSELLER-ProductManagement
-##      - IOS-GoSELLER-ProductManagement
-#
-#    if: always()
-#    steps:
-#      - name: Delete clone repository
-#        uses: geekyeggo/delete-artifact@v5
-#        with:
-#          name: ClonedRepository
+  CleanJob:
+    runs-on: ubuntu-20.04
+    needs:
+      - IOS-GoSELLER-CreateProduct
+#      - Android-GoSELLER-CreateProduct
+#      - Dashboard-ProductManagement
+#      - Storefront-ProductDetail-Promotion
+#      - Android-GoSELLER-ProductManagement
+#      - IOS-GoSELLER-ProductManagement
+
+    if: always()
+    steps:
+      - name: Delete clone repository
+        uses: geekyeggo/delete-artifact@v5
+        with:
+          name: ClonedRepository
