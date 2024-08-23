@@ -105,15 +105,12 @@ jobs:
 
       - name: Verify WebDriverAgent Directory
         run: |
-          sudo brew install
-          echo "Directory structure of $APPIUM_HOME:"
-          tree $APPIUM_HOME
-          
           cd $APPIUM_HOME/node_modules/appium-xcuitest-driver/node_modules/appium-webdriveragent
           ls -l
 
       - name: Run WebDriverAgent Tests
         run: |
+          cd $APPIUM_HOME/node_modules/appium-xcuitest-driver/node_modules/appium-webdriveragent
           xcodebuild -project WebDriverAgent.xcodeproj \
           -scheme WebDriverAgentRunner \
           -destination 'id=$SIMULATOR_UDID' \
@@ -140,23 +137,23 @@ jobs:
         if: always()
         run: cat appium_log.txt
 
-      - name: Upload all recording .mp4 files
-        if: always()
-        uses: actions/upload-artifact@v3
-        with:
-          name: ${{ inputs.test_name }} - MP4 Files
-          path: '**/*.mp4'
-
-      - name: Upload Test Report
-        if: always()
-        uses: actions/upload-artifact@v3
-        with:
-          name: ${{ inputs.test_name }} - Test Reports
-          path: |
-            **/html/index.html
-            **/reportng.css
-            **/reportng.js
-            **/suite*_test*_results.html
+#      - name: Upload all recording .mp4 files
+#        if: always()
+#        uses: actions/upload-artifact@v3
+#        with:
+#          name: ${{ inputs.test_name }} - MP4 Files
+#          path: '**/*.mp4'
+#
+#      - name: Upload Test Report
+#        if: always()
+#        uses: actions/upload-artifact@v3
+#        with:
+#          name: ${{ inputs.test_name }} - Test Reports
+#          path: |
+#            **/html/index.html
+#            **/reportng.css
+#            **/reportng.js
+#            **/suite*_test*_results.html
 
 #      - name: Remove cloned repo
 #        if: always()
