@@ -105,7 +105,7 @@ jobs:
 
       - name: Verify WebDriverAgent Directory
         run: |
-          sudo apt-get install -y tree
+          sudo brew install
           echo "Directory structure of $APPIUM_HOME:"
           tree $APPIUM_HOME
           
