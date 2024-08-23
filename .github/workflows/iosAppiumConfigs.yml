@@ -109,19 +109,17 @@ jobs:
           -scheme WebDriverAgentRunner \
           -destination 'id=$SIMULATOR_UDID' \
           clean build test &
+          xcrun simctl listapps $SIMULATOR_UDID
 
-      - name: Install dependencies
-        run: |
-          echo "${{ inputs.test_config }}"
-          echo "$SIMULATOR_UDID"
-          echo "${{ inputs.appium_port }}"
-          cd GoSELL-Automation
-          mvn install -DskipTests "-DsuiteFile=${{ inputs.test_config }}" "-DudidIOS=$SIMULATOR_UDID" "-DappiumPort=${{ inputs.appium_port }}"
-
-      - name: Run Tests
-        run: |
-          cd GoSELL-Automation
-          mvn clean install test "-DsuiteFile=${{ inputs.test_config }}" "-DudidIOS=$SIMULATOR_UDID" "-DappiumPort=${{ inputs.appium_port }}"
+#      - name: Install dependencies
+#        run: |
+#          cd GoSELL-Automation
+#          mvn install -DskipTests "-DsuiteFile=${{ inputs.test_config }}" "-DudidIOS=$SIMULATOR_UDID" "-DappiumPort=${{ inputs.appium_port }}"
+#
+#      - name: Run Tests
+#        run: |
+#          cd GoSELL-Automation
+#          mvn clean install test "-DsuiteFile=${{ inputs.test_config }}" "-DudidIOS=$SIMULATOR_UDID" "-DappiumPort=${{ inputs.appium_port }}"
 
       - name: Read appium log
         if: always()
