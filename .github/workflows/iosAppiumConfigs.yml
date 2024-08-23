@@ -75,14 +75,6 @@ jobs:
           path: /usr/local/Homebrew
           key: ${{ runner.os }}-brew-macos
 
-      - name: Cache Maven Dependencies
-        uses: actions/cache@v3
-        with:
-          path: ~/.m2/repository
-          key: ${{ runner.os }}-maven-macos
-          restore-keys: |
-            ${{ runner.os }}-maven-
-
       - name: Check available Xcode versions
         run: ls /Applications/
 
@@ -110,23 +102,10 @@ jobs:
           nohup appium -a 0.0.0.0 -p ${{ inputs.appium_port }} -pa /wd/hub > appium_log.txt 2>&1 &
           tail -f appium_log.txt &
 
-      - name: Cache Maven packages
-        uses: actions/cache@v3
-        with:
-          path: ~/.m2/repository
-          key: ${{ runner.os }}-maven-macos
-          restore-keys: |
-            ${{ runner.os }}-maven-macos
-
-      - name: Install dependencies
-        run: |
-          cd GoSELL-Automation
-          mvn install -DskipTests
-
       - name: Run Tests
         run: |
           cd GoSELL-Automation
-          mvn test "-DsuiteFile=${{ inputs.test_config }}" "-DudidIOS=$DEVICE_UDID" "-DappiumPort=${{ inputs.appium_port }}"
+          mvn clean install test "-DsuiteFile=${{ inputs.test_config }}" "-DudidIOS=$DEVICE_UDID" "-DappiumPort=${{ inputs.appium_port }}"
 
       - name: Read appium log
         run: cat appium_log.txt
