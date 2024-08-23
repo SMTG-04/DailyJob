@@ -101,6 +101,16 @@ jobs:
           appium driver doctor xcuitest
           nohup appium -a 0.0.0.0 -p ${{ inputs.appium_port }} -pa /wd/hub > appium_log.txt 2>&1 &
           tail -f appium_log.txt &
+        
+
+      - name: Verify WebDriverAgent Directory
+        run: |
+          sudo apt-get install -y tree
+          echo "Directory structure of $APPIUM_HOME:"
+          tree $APPIUM_HOME
+          
+          cd $APPIUM_HOME/node_modules/appium-xcuitest-driver/node_modules/appium-webdriveragent
+          ls -l
 
       - name: Run WebDriverAgent Tests
         run: |
