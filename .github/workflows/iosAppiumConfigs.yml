@@ -99,7 +99,7 @@ jobs:
           xcodebuild -project WebDriverAgent.xcodeproj \
           -scheme WebDriverAgentRunner \
           -destination 'id=$SIMULATOR_UDID' \
-          clean build &
+          clean build test&
           
           APP_PATH=$(find . -name "WebDriverAgentRunner.app" -print -quit)
           echo "APP_PATH=$APP_PATH"
