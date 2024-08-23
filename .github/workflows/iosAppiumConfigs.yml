@@ -100,6 +100,13 @@ jobs:
           echo "SIMULATOR_UDID=$DEVICE_UDID" >> $GITHUB_ENV
           echo "The iOS Simulator UDID is $DEVICE_UDID"
 
+      - name: Get list simulator
+        run: xcrun simctl list
+
+      - name: Boot simulator
+        run: |
+          xcrun simctl boot $DEVICE_UDID
+
       - name: Start Appium server
         run: |
           appium driver install xcuitest
@@ -124,6 +131,9 @@ jobs:
         run: |
           cd GoSELL-Automation
           mvn test "-DsuiteFile=${{ inputs.test_config }}" "-DudidIOS=$DEVICE_UDID" "-DappiumPort=${{ inputs.appium_port }}"
+
+      - name: Read appium log
+        run: cat appium_log.txt
 
       - name: Upload all recording .mp4 files
         if: always()

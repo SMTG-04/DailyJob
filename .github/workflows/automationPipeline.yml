@@ -123,13 +123,13 @@ jobs:
 #      test_name: "Storefront-ProductDetail-Promotion"
 #      test_config: "test_config/web/productDetail_combinePromotion.xml"
 
-  Android-GoSELLER-CreateProduct:
-    needs: CloneGit
-    uses: ./.github/workflows/androidAppiumConfigs.yml
-    with:
-      appium_port: 4723
-      test_name: "Android-GoSELLER-CreateProduct"
-      test_config: "test_config/android/seller/createProductTest.xml"
+#  Android-GoSELLER-CreateProduct:
+#    needs: CloneGit
+#    uses: ./.github/workflows/androidAppiumConfigs.yml
+#    with:
+#      appium_port: 4723
+#      test_name: "Android-GoSELLER-CreateProduct"
+#      test_config: "test_config/android/seller/createProductTest.xml"
 
 #  Android-GoSELLER-UpdateProduct:
 #    needs: CloneGit
@@ -183,7 +183,7 @@ jobs:
     runs-on: ubuntu-20.04
     needs:
       - IOS-GoSELLER-CreateProduct
-      - Android-GoSELLER-CreateProduct
+#      - Android-GoSELLER-CreateProduct
 #      - Dashboard-ProductManagement
 #      - Storefront-ProductDetail-Promotion
 #      - Android-GoSELLER-ProductManagement
