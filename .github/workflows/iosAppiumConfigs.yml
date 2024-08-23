@@ -95,6 +95,14 @@ jobs:
       - name: Get list simulator
         run: xcrun simctl list
 
+      - name: Run WebDriverAgent Tests
+        run: |
+          cd $APPIUM_HOME/node_modules/appium-xcuitest-driver/node_modules/appium-webdriveragent
+          xcodebuild -project WebDriverAgent.xcodeproj \
+          -scheme WebDriverAgentRunner \
+          -destination 'id=$SIMULATOR_UDID' \
+          clean build test &
+
       - name: Start Appium server
         run: |
           appium driver install xcuitest
