@@ -108,8 +108,11 @@ jobs:
           xcodebuild -project WebDriverAgent.xcodeproj \
             -scheme WebDriverAgentRunner \
             -destination 'id=$SIMULATOR_UDID' \
-            clean build test > build.log 2>&1
-          cat build.log
+            clean build test > wda_log.txt 2>&1
+
+      - name: Read WDA log
+        if: always()
+        run: cat wda_log.txt
 
 #      - name: Install dependencies
 #        run: |
@@ -143,8 +146,8 @@ jobs:
             **/reportng.js
             **/suite*_test*_results.html
 
-      - name: Remove cloned repo
-        if: always()
-        run: |
-          rm -r GoSELL-Automation
+#      - name: Remove cloned repo
+#        if: always()
+#        run: |
+#          rm -r GoSELL-Automation
 
