@@ -17,16 +17,16 @@ jobs:
     runs-on: macos-latest
 
     steps:
-#      - name: Download artifact
-#        uses: actions/download-artifact@v4
-#        with:
-#          name: ClonedRepository
-#          path: GoSELL-Automation
-#
-#      - name: Switch to another branch
-#        run: |
-#          cd GoSELL-Automation
-#          git checkout GoSELL-Thang
+      #      - name: Download artifact
+      #        uses: actions/download-artifact@v4
+      #        with:
+      #          name: ClonedRepository
+      #          path: GoSELL-Automation
+      #
+      #      - name: Switch to another branch
+      #        run: |
+      #          cd GoSELL-Automation
+      #          git checkout GoSELL-Thang
 
       - name: Setup Java
         uses: actions/setup-java@v3
@@ -59,11 +59,11 @@ jobs:
       - name: Install Xcode command-line tools
         run: xcode-select --install || true
 
-#      - name: Install FFmpeg
-#        run: brew install ffmpeg
+      #      - name: Install FFmpeg
+      #        run: brew install ffmpeg
 
-#      - name: Verify FFmpeg Installation
-#        run: ffmpeg -version
+      #      - name: Verify FFmpeg Installation
+      #        run: ffmpeg -version
 
       - name: Install Carthage
         run: brew install carthage
@@ -75,14 +75,14 @@ jobs:
           path: /usr/local/Homebrew
           key: ${{ runner.os }}-brew-macos
 
-#      - name: Check available Xcode versions
-#        run: ls /Applications/
+      #      - name: Check available Xcode versions
+      #        run: ls /Applications/
 
       - name: Set Xcode version
         run: sudo xcode-select --switch /Applications/Xcode.app
 
-#      - name: Check Runtime list
-#        run: xcrun simctl list runtimes
+      #      - name: Check Runtime list
+      #        run: xcrun simctl list runtimes
 
       - name: Start iOS Simulator
         id: start_simulator
@@ -92,23 +92,41 @@ jobs:
           echo "SIMULATOR_UDID=$DEVICE_UDID" >> $GITHUB_ENV
           echo "The iOS Simulator UDID is $DEVICE_UDID"
 
-#      - name: Get list simulator
-#        run: xcrun simctl list
+      #      - name: Get list simulator
+      #        run: xcrun simctl list
 
       - name: Start Appium server
         run: |
           appium driver install xcuitest
-#          appium driver doctor xcuitest
-#          nohup appium -a 0.0.0.0 -p ${{ inputs.appium_port }} -pa /wd/hub > appium_log.txt 2>&1 &
-#          tail -f appium_log.txt &
+      #          appium driver doctor xcuitest
+      #          nohup appium -a 0.0.0.0 -p ${{ inputs.appium_port }} -pa /wd/hub > appium_log.txt 2>&1 &
+      #          tail -f appium_log.txt &
 
       - name: Run WebDriverAgent Tests
         run: |
           cd $APPIUM_HOME/node_modules/appium-xcuitest-driver/node_modules/appium-webdriveragent
           xcodebuild -project WebDriverAgent.xcodeproj \
-          -scheme WebDriverAgentRunner \
-          -destination 'id=$SIMULATOR_UDID' \
-          clean build test &
+            -scheme WebDriverAgentRunner \
+            -destination 'id=$SIMULATOR_UDID' \
+            clean build test > wda_log.txt 2>&1
+          tail -n 100 wda_log.txt
+
+      - name: Install WebDriverAgent
+        run: |
+          cd $APPIUM_HOME/node_modules/appium-xcuitest-driver/node_modules/appium-webdriveragent
+          xcrun simctl install $SIMULATOR_UDID build/Debug-iphonesimulator/WebDriverAgentRunner.app
+
+      - name: List Installed Apps
+        run: |
+          xcrun simctl listapps $SIMULATOR_UDID
+
+      #      - name: Run WebDriverAgent Tests
+      #        run: |
+      #          cd $APPIUM_HOME/node_modules/appium-xcuitest-driver/node_modules/appium-webdriveragent
+      #          xcodebuild -project WebDriverAgent.xcodeproj \
+      #          -scheme WebDriverAgentRunner \
+      #          -destination 'id=$SIMULATOR_UDID' \
+      #          clean build test &
 
       - name: Check WDA install
         run: |
