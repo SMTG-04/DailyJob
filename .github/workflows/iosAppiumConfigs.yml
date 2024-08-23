@@ -105,16 +105,15 @@ jobs:
       - name: Run WebDriverAgent Tests
         run: |
           cd $APPIUM_HOME/node_modules/appium-xcuitest-driver/node_modules/appium-webdriveragent
-          xcodebuild -project WebDriverAgent.xcodeproj \
+          nohup xcodebuild -project WebDriverAgent.xcodeproj \
           -scheme WebDriverAgentRunner \
           -destination 'id=$SIMULATOR_UDID' \
-          clean build test > wda_log.txt 2>&1 & || (tail -n 100 wda_log.txt; exit 1)
-    
-          echo "WebDriverAgent build and test logs:"
-          cat wda_log.txt
+          clean build test > wda_log.txt 2>&1 &
 
       - name: Check WDA install
         run: |
+          echo "WebDriverAgent build and test logs:"
+          cat wda_log.txt
           xcrun simctl listapps $SIMULATOR_UDID
 
 
