@@ -59,11 +59,11 @@ jobs:
       - name: Install Xcode command-line tools
         run: xcode-select --install || true
 
-      - name: Install FFmpeg
-        run: brew install ffmpeg
+#      - name: Install FFmpeg
+#        run: brew install ffmpeg
 
-      - name: Verify FFmpeg Installation
-        run: ffmpeg -version
+#      - name: Verify FFmpeg Installation
+#        run: ffmpeg -version
 
       - name: Install Carthage
         run: brew install carthage
@@ -104,11 +104,13 @@ jobs:
 
       - name: Run WebDriverAgent Tests
         run: |
-          cd $APPIUM_HOME/node_modules/appium-xcuitest-driver/node_modules/appium-webdriveragent
           xcodebuild -project WebDriverAgent.xcodeproj \
-            -scheme WebDriverAgentRunner \
-            -destination 'id=$SIMULATOR_UDID' \
-            clean build test > wda_log.txt 2>&1
+          -scheme WebDriverAgentRunner \
+          -destination 'id=$SIMULATOR_UDID' \
+          clean build test > wda_log.txt 2>&1 || (tail -n 100 wda_log.txt; exit 1)
+    
+          echo "WebDriverAgent build and test logs:"
+          cat wda_log.txt
 
       - name: Read WDA log
         if: always()
