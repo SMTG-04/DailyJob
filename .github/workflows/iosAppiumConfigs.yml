@@ -75,14 +75,14 @@ jobs:
           path: /usr/local/Homebrew
           key: ${{ runner.os }}-brew-macos
 
-      - name: Check available Xcode versions
-        run: ls /Applications/
+#      - name: Check available Xcode versions
+#        run: ls /Applications/
 
       - name: Set Xcode version
         run: sudo xcode-select --switch /Applications/Xcode.app
 
-      - name: Check Runtime list
-        run: xcrun simctl list runtimes
+#      - name: Check Runtime list
+#        run: xcrun simctl list runtimes
 
       - name: Start iOS Simulator
         id: start_simulator
@@ -92,15 +92,15 @@ jobs:
           echo "SIMULATOR_UDID=$DEVICE_UDID" >> $GITHUB_ENV
           echo "The iOS Simulator UDID is $DEVICE_UDID"
 
-      - name: Get list simulator
-        run: xcrun simctl list
+#      - name: Get list simulator
+#        run: xcrun simctl list
 
       - name: Start Appium server
         run: |
           appium driver install xcuitest
-          appium driver doctor xcuitest
-          nohup appium -a 0.0.0.0 -p ${{ inputs.appium_port }} -pa /wd/hub > appium_log.txt 2>&1 &
-          tail -f appium_log.txt &
+#          appium driver doctor xcuitest
+#          nohup appium -a 0.0.0.0 -p ${{ inputs.appium_port }} -pa /wd/hub > appium_log.txt 2>&1 &
+#          tail -f appium_log.txt &
 
       - name: Run WebDriverAgent Tests
         run: |
@@ -108,8 +108,7 @@ jobs:
           xcodebuild -project WebDriverAgent.xcodeproj \
           -scheme WebDriverAgentRunner \
           -destination 'id=$SIMULATOR_UDID' \
-          clean build test &
-          > wda_log.txt 2>&1 || (tail -n 100 wda_log.txt; exit 1)
+          clean build test > wda_log.txt 2>&1 & || (tail -n 100 wda_log.txt; exit 1)
     
           echo "WebDriverAgent build and test logs:"
           cat wda_log.txt
@@ -124,9 +123,9 @@ jobs:
 #          cd GoSELL-Automation
 #          mvn clean install test "-DsuiteFile=${{ inputs.test_config }}" "-DudidIOS=$SIMULATOR_UDID" "-DappiumPort=${{ inputs.appium_port }}"
 
-      - name: Read appium log
-        if: always()
-        run: cat appium_log.txt
+#      - name: Read appium log
+#        if: always()
+#        run: cat appium_log.txt
 
 #      - name: Upload all recording .mp4 files
 #        if: always()
