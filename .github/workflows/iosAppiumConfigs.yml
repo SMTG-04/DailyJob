@@ -95,6 +95,13 @@ jobs:
       - name: Get list simulator
         run: xcrun simctl list
 
+      - name: Start Appium server
+        run: |
+          appium driver install xcuitest
+          appium driver doctor xcuitest
+          nohup appium -a 0.0.0.0 -p ${{ inputs.appium_port }} -pa /wd/hub > appium_log.txt 2>&1 &
+          tail -f appium_log.txt &
+
       - name: Run WebDriverAgent Tests
         run: |
           cd $APPIUM_HOME/node_modules/appium-xcuitest-driver/node_modules/appium-webdriveragent
@@ -102,13 +109,6 @@ jobs:
           -scheme WebDriverAgentRunner \
           -destination 'id=$SIMULATOR_UDID' \
           clean build test &
-
-      - name: Start Appium server
-        run: |
-          appium driver install xcuitest
-          appium driver doctor xcuitest
-          nohup appium -a 0.0.0.0 -p ${{ inputs.appium_port }} -pa /wd/hub > appium_log.txt 2>&1 &
-          tail -f appium_log.txt &
 
       - name: Install dependencies
         run: |
