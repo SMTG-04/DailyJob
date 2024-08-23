@@ -89,26 +89,14 @@ jobs:
       - name: Start Appium server
         run: |
           appium driver install xcuitest
-          appium driver doctor xcuitest
-          nohup appium -a 0.0.0.0 -p ${{ inputs.appium_port }} -pa /wd/hub > appium_log.txt 2>&1 &
-          tail -f appium_log.txt &
+#          appium driver doctor xcuitest
+#          nohup appium -a 0.0.0.0 -p ${{ inputs.appium_port }} -pa /wd/hub > appium_log.txt 2>&1 &
+#          tail -f appium_log.txt &
 
       - name: Run WebDriverAgent Tests
         run: |
           cd $APPIUM_HOME/node_modules/appium-xcuitest-driver/node_modules/appium-webdriveragent
-          xcodebuild -project WebDriverAgent.xcodeproj \
-          -scheme WebDriverAgentRunner \
-          -destination 'id=$SIMULATOR_UDID' \
-          clean build test&
-          
-          APP_PATH=$(find . -name "WebDriverAgentRunner.app" -print -quit)
-          echo "APP_PATH=$APP_PATH"
-          echo "app_path=$APP_PATH" >> $GITHUB_ENV
-
-      - name: Install WebDriverAgent
-        run: |
-          cd $APPIUM_HOME/node_modules/appium-xcuitest-driver/node_modules/appium-webdriveragent
-          xcrun simctl install $SIMULATOR_UDID ${{ env.app_path }}
+          xcodebuild -project WebDriverAgent.xcodeproj -scheme WebDriverAgentRunner -destination 'id=$SIMULATOR_UDID' clean build test -verbose & 
 
       - name: List Installed Apps
         run: |
