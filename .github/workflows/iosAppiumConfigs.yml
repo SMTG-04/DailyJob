@@ -105,15 +105,15 @@ jobs:
       - name: Install dependencies
         run: |
           echo "${{ inputs.test_config }}"
-          echo "$DEVICE_UDID"
+          echo "$SIMULATOR_UDID"
           echo "${{ inputs.appium_port }}"
           cd GoSELL-Automation
-          mvn install -DskipTests "-DsuiteFile=${{ inputs.test_config }}" "-DudidIOS=$DEVICE_UDID" "-DappiumPort=${{ inputs.appium_port }}"
+          mvn install -DskipTests "-DsuiteFile=${{ inputs.test_config }}" "-DudidIOS=$SIMULATOR_UDID" "-DappiumPort=${{ inputs.appium_port }}"
 
       - name: Run Tests
         run: |
           cd GoSELL-Automation
-          mvn clean install test "-DsuiteFile=${{ inputs.test_config }}" "-DudidIOS=$DEVICE_UDID" "-DappiumPort=${{ inputs.appium_port }}"
+          mvn clean install test "-DsuiteFile=${{ inputs.test_config }}" "-DudidIOS=$SIMULATOR_UDID" "-DappiumPort=${{ inputs.appium_port }}"
 
       - name: Read appium log
         if: always()
