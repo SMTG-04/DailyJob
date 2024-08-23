@@ -106,10 +106,10 @@ jobs:
         run: |
           cd $APPIUM_HOME/node_modules/appium-xcuitest-driver/node_modules/appium-webdriveragent
           xcodebuild -project WebDriverAgent.xcodeproj \
-          -scheme WebDriverAgentRunner \
-          -destination 'id=$SIMULATOR_UDID' \
-          clean build test &
-          xcrun simctl listapps $SIMULATOR_UDID
+            -scheme WebDriverAgentRunner \
+            -destination 'id=$SIMULATOR_UDID' \
+            clean build test > build.log 2>&1
+          cat build.log
 
 #      - name: Install dependencies
 #        run: |
