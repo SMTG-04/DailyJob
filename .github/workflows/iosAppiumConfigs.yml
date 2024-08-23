@@ -103,10 +103,6 @@ jobs:
       - name: Get list simulator
         run: xcrun simctl list
 
-      - name: Boot simulator
-        run: |
-          xcrun simctl boot $DEVICE_UDID
-
       - name: Start Appium server
         run: |
           appium driver install xcuitest
