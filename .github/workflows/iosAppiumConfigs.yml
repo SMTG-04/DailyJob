@@ -102,12 +102,21 @@ jobs:
           nohup appium -a 0.0.0.0 -p ${{ inputs.appium_port }} -pa /wd/hub > appium_log.txt 2>&1 &
           tail -f appium_log.txt &
 
+      - name: Install dependencies
+        run: |
+          echo "${{ inputs.test_config }}"
+          echo "$DEVICE_UDID"
+          echo "${{ inputs.appium_port }}"
+          cd GoSELL-Automation
+          mvn install -DskipTests "-DsuiteFile=${{ inputs.test_config }}" "-DudidIOS=$DEVICE_UDID" "-DappiumPort=${{ inputs.appium_port }}"
+
       - name: Run Tests
         run: |
           cd GoSELL-Automation
           mvn clean install test "-DsuiteFile=${{ inputs.test_config }}" "-DudidIOS=$DEVICE_UDID" "-DappiumPort=${{ inputs.appium_port }}"
 
       - name: Read appium log
+        if: always()
         run: cat appium_log.txt
 
       - name: Upload all recording .mp4 files
