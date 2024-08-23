@@ -113,6 +113,11 @@ jobs:
           echo "WebDriverAgent build and test logs:"
           cat wda_log.txt
 
+      - name: Check WDA install
+        run: |
+          xcrun simctl listapps $SIMULATOR_UDID
+
+
 #      - name: Install dependencies
 #        run: |
 #          cd GoSELL-Automation
