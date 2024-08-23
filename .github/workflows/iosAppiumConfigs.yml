@@ -17,16 +17,16 @@ jobs:
     runs-on: macos-latest
 
     steps:
-            - name: Download artifact
-              uses: actions/download-artifact@v4
-              with:
-                name: ClonedRepository
-                path: GoSELL-Automation
+      - name: Download artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: ClonedRepository
+          path: GoSELL-Automation
 
-            - name: Switch to another branch
-              run: |
-                cd GoSELL-Automation
-                git checkout GoSELL-Thang
+      - name: Switch to another branch
+        run: |
+          cd GoSELL-Automation
+          git checkout GoSELL-Thang
 
       - name: Setup Java
         uses: actions/setup-java@v3
