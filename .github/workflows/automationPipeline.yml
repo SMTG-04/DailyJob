@@ -13,7 +13,10 @@ env:
   BRANCH_NAME: GoSELL-Thang
 
 jobs:
-#  CloneGit:
+  CloneGit:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "abc"
 #    uses: ThangNguyen0495/Reusable/.github/workflows/cloneGitLabConfigs.yml@main
 #    with:
 #      vpn_username: ${{ secrets.VPN_USERNAME }}
