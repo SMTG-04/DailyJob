@@ -5,21 +5,21 @@ on:
     branches:
       - main
 
-#concurrency:
-#  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
-#  cancel-in-progress: true
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
 
 env:
   BRANCH_NAME: GoSELL-Thang
 
 jobs:
-  CloneGit:
-    uses: ThangNguyen0495/Reusable/.github/workflows/cloneGitLabConfigs.yml@main
-    with:
-      vpn_username: ${{ secrets.VPN_USERNAME }}
-      vpn_password: ${{ secrets.VPN_PASSWORD }}
-      gitlab_host: ${{ secrets.GITLAB_HOST }}
-      gitlab_repo: ${{ secrets.GITLAB_REPOSITORY }}
+#  CloneGit:
+#    uses: ThangNguyen0495/Reusable/.github/workflows/cloneGitLabConfigs.yml@main
+#    with:
+#      vpn_username: ${{ secrets.VPN_USERNAME }}
+#      vpn_password: ${{ secrets.VPN_PASSWORD }}
+#      gitlab_host: ${{ secrets.GITLAB_HOST }}
+#      gitlab_repo: ${{ secrets.GITLAB_REPOSITORY }}
 
   Dashboard-CreateProduct:
     needs: CloneGit
