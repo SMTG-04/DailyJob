@@ -18,7 +18,7 @@ jobs:
 
   Dashboard-CreateProduct:
     needs: CloneGit
-    uses: ThangNguyen0495/Reusable/.github/workflows/seleniumConfigs.yml
+    uses: ThangNguyen0495/Reusable/.github/workflows/seleniumConfigs.yml@main
     with:
       test_name: "Dashboard-CreateProduct"
       test_config: "test_config/web/createProductTest.xml"
@@ -26,7 +26,7 @@ jobs:
 
   Dashboard-UpdateProduct:
     needs: CloneGit
-    uses: ThangNguyen0495/Reusable/.github/workflows/seleniumConfigs.yml
+    uses: ThangNguyen0495/Reusable/.github/workflows/seleniumConfigs.yml@main
     with:
       test_name: "Dashboard-UpdateProduct"
       test_config: "test_config/web/updateProductTest.xml"
@@ -38,7 +38,7 @@ jobs:
       - Dashboard-UpdateProduct
 
     if: always()
-    uses: ThangNguyen0495/Reusable/.github/workflows/seleniumConfigs.yml
+    uses: ThangNguyen0495/Reusable/.github/workflows/seleniumConfigs.yml@main
     with:
       test_name: "Dashboard-ProductManagement"
       test_config: "test_config/web/productManagementTest.xml"
@@ -46,7 +46,7 @@ jobs:
 
   Storefront-ProductDetail-NormalxWithoutVariation:
     needs: CloneGit
-    uses: ThangNguyen0495/Reusable/.github/workflows/seleniumConfigs.yml
+    uses: ThangNguyen0495/Reusable/.github/workflows/seleniumConfigs.yml@main
     with:
       test_name: "Storefront-ProductDetail-NormalxWithoutVariation"
       test_config: "test_config/web/productDetail_Normal_withoutVariation.xml"
@@ -54,7 +54,7 @@ jobs:
 
   Storefront-ProductDetail-IMEIxWithoutVariation:
     needs: CloneGit
-    uses: ThangNguyen0495/Reusable/.github/workflows/seleniumConfigs.yml
+    uses: ThangNguyen0495/Reusable/.github/workflows/seleniumConfigs.yml@main
     with:
       test_name: "Storefront-ProductDetail-IMEIxWithoutVariation"
       test_config: "test_config/web/productDetail_IMEI_withoutVariation.xml"
@@ -62,7 +62,7 @@ jobs:
 
   Storefront-ProductDetail-NormalxVariation:
     needs: CloneGit
-    uses: ThangNguyen0495/Reusable/.github/workflows/seleniumConfigs.yml
+    uses: ThangNguyen0495/Reusable/.github/workflows/seleniumConfigs.yml@main
     with:
       test_name: "Storefront-ProductDetail-NormalxVariation"
       test_config: "test_config/web/productDetail_Normal_Variation.xml"
@@ -70,7 +70,7 @@ jobs:
 
   Storefront-ProductDetail-IMEIxVariation:
     needs: CloneGit
-    uses: ThangNguyen0495/Reusable/.github/workflows/seleniumConfigs.yml
+    uses: ThangNguyen0495/Reusable/.github/workflows/seleniumConfigs.yml@main
     with:
       test_name: "Storefront-ProductDetail-IMEIxVariation"
       test_config: "test_config/web/productDetail_IMEI_Variation.xml"
@@ -84,7 +84,7 @@ jobs:
       - Storefront-ProductDetail-IMEIxVariation
 
     if: always()
-    uses: ThangNguyen0495/Reusable/.github/workflows/seleniumConfigs.yml
+    uses: ThangNguyen0495/Reusable/.github/workflows/seleniumConfigs.yml@main
     with:
       test_name: "Storefront-ProductDetail-Promotion"
       test_config: "test_config/web/productDetail_combinePromotion.xml"
@@ -92,7 +92,7 @@ jobs:
 
   Android-GoSELLER-CreateProduct:
     needs: CloneGit
-    uses: ThangNguyen0495/Reusable/.github/workflows/androidAppiumConfigs.yml
+    uses: ThangNguyen0495/Reusable/.github/workflows/androidAppiumConfigs.yml@main
     with:
       appium_port: 4723
       test_name: "Android-GoSELLER-CreateProduct"
@@ -101,7 +101,7 @@ jobs:
 
   Android-GoSELLER-UpdateProduct:
     needs: CloneGit
-    uses: ThangNguyen0495/Reusable/.github/workflows/androidAppiumConfigs.yml
+    uses: ThangNguyen0495/Reusable/.github/workflows/androidAppiumConfigs.yml@main
     with:
       appium_port: 4724
       test_name: "Android-GoSELLER-UpdateProduct"
@@ -113,7 +113,7 @@ jobs:
       - Android-GoSELLER-CreateProduct
       - Android-GoSELLER-UpdateProduct
     if: always()
-    uses: ThangNguyen0495/Reusable/.github/workflows/androidAppiumConfigs.yml
+    uses: ThangNguyen0495/Reusable/.github/workflows/androidAppiumConfigs.yml@main
     with:
       appium_port: 4725
       test_name: "Android-GoSELLER-ProductManagement"
@@ -122,7 +122,7 @@ jobs:
 
   IOS-GoSELLER-CreateProduct:
     needs: CloneGit
-    uses: ThangNguyen0495/Reusable/.github/workflows/iosAppiumConfigs.yml
+    uses: ThangNguyen0495/Reusable/.github/workflows/iosAppiumConfigs.yml@main
     with:
       appium_port: 4726
       test_name: "IOS-GoSELLER-CreateProduct"
@@ -132,7 +132,7 @@ jobs:
   IOS-GoSELLER-UpdateProduct:
     needs: CloneGit
     if: always()
-    uses: ThangNguyen0495/Reusable/.github/workflows/iosAppiumConfigs.yml
+    uses: ThangNguyen0495/Reusable/.github/workflows/iosAppiumConfigs.yml@main
     with:
       appium_port: 4727
       test_name: "IOS-GoSELLER-UpdateProduct"
@@ -144,7 +144,7 @@ jobs:
       - IOS-GoSELLER-CreateProduct
       - IOS-GoSELLER-UpdateProduct
     if: always()
-    uses: ThangNguyen0495/Reusable/.github/workflows/iosAppiumConfigs.yml
+    uses: ThangNguyen0495/Reusable/.github/workflows/iosAppiumConfigs.yml@main
     with:
       appium_port: 4728
       test_name: "IOS-GoSELLER-ProductManagement"
