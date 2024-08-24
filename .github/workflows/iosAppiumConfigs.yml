@@ -75,22 +75,8 @@ jobs:
           path: /usr/local/Homebrew
           key: ${{ runner.os }}-brew-macos
 
-      - name: Cache Maven Dependencies
-        uses: actions/cache@v3
-        with:
-          path: ~/.m2/repository
-          key: ${{ runner.os }}-maven-macos
-          restore-keys: |
-            ${{ runner.os }}-maven-
-
-      - name: Check available Xcode versions
-        run: ls /Applications/
-
       - name: Set Xcode version
         run: sudo xcode-select --switch /Applications/Xcode.app
-
-      - name: Check Runtime list
-        run: xcrun simctl list runtimes
 
       - name: Start iOS Simulator
         id: start_simulator
@@ -107,13 +93,14 @@ jobs:
           nohup appium -a 0.0.0.0 -p ${{ inputs.appium_port }} -pa /wd/hub > appium_log.txt 2>&1 &
           tail -f appium_log.txt &
 
-      - name: Cache Maven packages
-        uses: actions/cache@v3
-        with:
-          path: ~/.m2/repository
-          key: ${{ runner.os }}-maven-macos
-          restore-keys: |
-            ${{ runner.os }}-maven-macos
+      - name: Run WebDriverAgent Tests
+        run: |
+          cd $APPIUM_HOME/node_modules/appium-xcuitest-driver/node_modules/appium-webdriveragent
+          xcodebuild -project WebDriverAgent.xcodeproj -scheme WebDriverAgentRunner -destination 'id=$SIMULATOR_UDID' clean build test -verbose & 
+
+      - name: List Installed Apps
+        run: |
+          xcrun simctl listapps $SIMULATOR_UDID
 
       - name: Install dependencies
         run: |
@@ -123,7 +110,11 @@ jobs:
       - name: Run Tests
         run: |
           cd GoSELL-Automation
-          mvn test "-DsuiteFile=${{ inputs.test_config }}" "-DudidIOS=$DEVICE_UDID" "-DappiumPort=${{ inputs.appium_port }}"
+          mvn clean install test "-DsuiteFile=${{ inputs.test_config }}" "-DudidIOS=$SIMULATOR_UDID" "-DappiumPort=${{ inputs.appium_port }}"
+
+      - name: Read appium log
+        if: always()
+        run: cat appium_log.txt
 
       - name: Upload all recording .mp4 files
         if: always()
