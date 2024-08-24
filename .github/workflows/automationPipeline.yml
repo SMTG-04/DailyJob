@@ -78,6 +78,7 @@ jobs:
 
   Storefront-ProductDetail-Promotion:
     needs:
+      - CloneGit
       - Storefront-ProductDetail-NormalxWithoutVariation
       - Storefront-ProductDetail-IMEIxWithoutVariation
       - Storefront-ProductDetail-NormalxVariation
@@ -110,6 +111,7 @@ jobs:
 
   Android-GoSELLER-ProductManagement:
     needs:
+      - CloneGit
       - Android-GoSELLER-CreateProduct
       - Android-GoSELLER-UpdateProduct
     if: always()
@@ -141,6 +143,7 @@ jobs:
 
   IOS-GoSELLER-ProductManagement:
     needs:
+      - CloneGit
       - IOS-GoSELLER-CreateProduct
       - IOS-GoSELLER-UpdateProduct
     if: always()
@@ -155,6 +158,7 @@ jobs:
   CleanJob:
     runs-on: ubuntu-20.04
     needs:
+      - CloneGit
       - Dashboard-ProductManagement
       - Storefront-ProductDetail-Promotion
       - Android-GoSELLER-ProductManagement
