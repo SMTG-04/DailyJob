@@ -9,33 +9,33 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: true
 
-env:
-  BRANCH_NAME: GoSELL-Thang
-
 jobs:
-  CloneGit:
-    uses: ThangNguyen0495/Reusable/.github/workflows/cloneGitLabConfigs.yml@main
+  Get-SourceCode:
+    uses: SMTG-04/Reusable/.github/workflows/cloneGitConfigs.yml@main
     with:
-      vpn_username: ${{ secrets.VPN_USERNAME }}
-      vpn_password: ${{ secrets.VPN_PASSWORD }}
-      gitlab_host: ${{ secrets.GITLAB_HOST }}
-      gitlab_repo: ${{ secrets.GITLAB_REPOSITORY }}
+      artifact: "ClonedRepo"
+    secrets:
+      VPN_USERNAME: ${{ secrets.VPN_USERNAME }}
+      VPN_PASSWORD: ${{ secrets.VPN_PASSWORD }}
+      GIT_REPO: ${{ secrets.GIT_REPO }}
 
   Dashboard-CreateProduct:
-    needs: CloneGit
-    uses: ThangNguyen0495/Reusable/.github/workflows/seleniumConfigs.yml@main
+    needs: Get-SourceCode
+    uses: SMTG-04/Reusable/.github/workflows/seleniumConfigs.yml@main
     with:
+      artifact: "ClonedRepo"
       test_name: "Dashboard-CreateProduct"
       test_config: "test_config/web/createProductTest.xml"
-      branch_name: $BRANCH_NAME
+      branch_name: "GoSELL-Thang"
 
   Dashboard-UpdateProduct:
-    needs: CloneGit
-    uses: ThangNguyen0495/Reusable/.github/workflows/seleniumConfigs.yml@main
+    needs: Get-SourceCode
+    uses: SMTG-04/Reusable/.github/workflows/seleniumConfigs.yml@main
     with:
+      artifact: "ClonedRepo"
       test_name: "Dashboard-UpdateProduct"
       test_config: "test_config/web/updateProductTest.xml"
-      branch_name: $BRANCH_NAME
+      branch_name: "GoSELL-Thang"
 
   Dashboard-ProductManagement:
     needs:
@@ -43,127 +43,135 @@ jobs:
       - Dashboard-UpdateProduct
 
     if: always()
-    uses: ThangNguyen0495/Reusable/.github/workflows/seleniumConfigs.yml@main
+    uses: SMTG-04/Reusable/.github/workflows/seleniumConfigs.yml@main
     with:
+      artifact: "ClonedRepo"
       test_name: "Dashboard-ProductManagement"
       test_config: "test_config/web/productManagementTest.xml"
-      branch_name: $BRANCH_NAME
+      branch_name: "GoSELL-Thang"
 
   Storefront-ProductDetail-NormalxWithoutVariation:
-    needs: CloneGit
-    uses: ThangNguyen0495/Reusable/.github/workflows/seleniumConfigs.yml@main
+    needs: Get-SourceCode
+    uses: SMTG-04/Reusable/.github/workflows/seleniumConfigs.yml@main
     with:
+      artifact: "ClonedRepo"
       test_name: "Storefront-ProductDetail-NormalxWithoutVariation"
       test_config: "test_config/web/productDetail_Normal_withoutVariation.xml"
-      branch_name: $BRANCH_NAME
+      branch_name: "GoSELL-Thang"
 
   Storefront-ProductDetail-IMEIxWithoutVariation:
-    needs: CloneGit
-    uses: ThangNguyen0495/Reusable/.github/workflows/seleniumConfigs.yml@main
+    needs: Get-SourceCode
+    uses: SMTG-04/Reusable/.github/workflows/seleniumConfigs.yml@main
     with:
+      artifact: "ClonedRepo"
       test_name: "Storefront-ProductDetail-IMEIxWithoutVariation"
       test_config: "test_config/web/productDetail_IMEI_withoutVariation.xml"
-      branch_name: $BRANCH_NAME
+      branch_name: "GoSELL-Thang"
 
   Storefront-ProductDetail-NormalxVariation:
-    needs: CloneGit
-    uses: ThangNguyen0495/Reusable/.github/workflows/seleniumConfigs.yml@main
+    needs: Get-SourceCode
+    uses: SMTG-04/Reusable/.github/workflows/seleniumConfigs.yml@main
     with:
+      artifact: "ClonedRepo"
       test_name: "Storefront-ProductDetail-NormalxVariation"
       test_config: "test_config/web/productDetail_Normal_Variation.xml"
-      branch_name: $BRANCH_NAME
+      branch_name: "GoSELL-Thang"
 
   Storefront-ProductDetail-IMEIxVariation:
-    needs: CloneGit
-    uses: ThangNguyen0495/Reusable/.github/workflows/seleniumConfigs.yml@main
+    needs: Get-SourceCode
+    uses: SMTG-04/Reusable/.github/workflows/seleniumConfigs.yml@main
     with:
+      artifact: "ClonedRepo"
       test_name: "Storefront-ProductDetail-IMEIxVariation"
       test_config: "test_config/web/productDetail_IMEI_Variation.xml"
-      branch_name: $BRANCH_NAME
+      branch_name: "GoSELL-Thang"
 
   Storefront-ProductDetail-Promotion:
     needs:
-      - CloneGit
       - Storefront-ProductDetail-NormalxWithoutVariation
       - Storefront-ProductDetail-IMEIxWithoutVariation
       - Storefront-ProductDetail-NormalxVariation
       - Storefront-ProductDetail-IMEIxVariation
 
     if: always()
-    uses: ThangNguyen0495/Reusable/.github/workflows/seleniumConfigs.yml@main
+    uses: SMTG-04/Reusable/.github/workflows/seleniumConfigs.yml@main
     with:
+      artifact: "ClonedRepo"
       test_name: "Storefront-ProductDetail-Promotion"
       test_config: "test_config/web/productDetail_combinePromotion.xml"
-      branch_name: $BRANCH_NAME
+      branch_name: "GoSELL-Thang"
 
   Android-GoSELLER-CreateProduct:
-    needs: CloneGit
-    uses: ThangNguyen0495/Reusable/.github/workflows/androidAppiumConfigs.yml@main
+    needs: Get-SourceCode
+    uses: SMTG-04/Reusable/.github/workflows/androidAppiumConfigs.yml@main
     with:
-      appium_port: 4723
+      artifact: "ClonedRepo"
+      appium_port: "4723"
       test_name: "Android-GoSELLER-CreateProduct"
       test_config: "test_config/android/seller/createProductTest.xml"
-      branch_name: $BRANCH_NAME
+      branch_name: "GoSELL-Thang"
 
   Android-GoSELLER-UpdateProduct:
-    needs: CloneGit
-    uses: ThangNguyen0495/Reusable/.github/workflows/androidAppiumConfigs.yml@main
+    needs: Get-SourceCode
+    uses: SMTG-04/Reusable/.github/workflows/androidAppiumConfigs.yml@main
     with:
-      appium_port: 4724
+      artifact: "ClonedRepo"
+      appium_port: "4723"
       test_name: "Android-GoSELLER-UpdateProduct"
       test_config: "test_config/android/seller/editProductTest.xml"
-      branch_name: $BRANCH_NAME
+      branch_name: "GoSELL-Thang"
 
   Android-GoSELLER-ProductManagement:
     needs:
-      - CloneGit
       - Android-GoSELLER-CreateProduct
       - Android-GoSELLER-UpdateProduct
     if: always()
-    uses: ThangNguyen0495/Reusable/.github/workflows/androidAppiumConfigs.yml@main
+    uses: SMTG-04/Reusable/.github/workflows/androidAppiumConfigs.yml@main
     with:
-      appium_port: 4725
+      artifact: "ClonedRepo"
+      appium_port: "4723"
       test_name: "Android-GoSELLER-ProductManagement"
       test_config: "test_config/android/seller/productManagementTest.xml"
-      branch_name: $BRANCH_NAME
+      branch_name: "GoSELL-Thang"
 
   IOS-GoSELLER-CreateProduct:
-    needs: CloneGit
-    uses: ThangNguyen0495/Reusable/.github/workflows/iosAppiumConfigs.yml@main
+    needs: Get-SourceCode
+    uses: SMTG-04/Reusable/.github/workflows/iosAppiumConfigs.yml@main
     with:
-      appium_port: 4726
+      artifact: "ClonedRepo"
+      appium_port: "4723"
       test_name: "IOS-GoSELLER-CreateProduct"
       test_config: "test_config/iOS/seller/createProductTest.xml"
-      branch_name: $BRANCH_NAME
+      branch_name: "GoSELL-Thang"
 
   IOS-GoSELLER-UpdateProduct:
-    needs: CloneGit
+    needs: Get-SourceCode
     if: always()
-    uses: ThangNguyen0495/Reusable/.github/workflows/iosAppiumConfigs.yml@main
+    uses: SMTG-04/Reusable/.github/workflows/iosAppiumConfigs.yml@main
     with:
-      appium_port: 4727
+      artifact: "ClonedRepo"
+      appium_port: "4723"
       test_name: "IOS-GoSELLER-UpdateProduct"
       test_config: "test_config/iOS/seller/editProductTest.xml"
-      branch_name: $BRANCH_NAME
+      branch_name: "GoSELL-Thang"
 
   IOS-GoSELLER-ProductManagement:
     needs:
-      - CloneGit
       - IOS-GoSELLER-CreateProduct
       - IOS-GoSELLER-UpdateProduct
     if: always()
-    uses: ThangNguyen0495/Reusable/.github/workflows/iosAppiumConfigs.yml@main
+    uses: SMTG-04/Reusable/.github/workflows/iosAppiumConfigs.yml@main
     with:
-      appium_port: 4728
+      artifact: "ClonedRepo"
+      appium_port: "4723"
       test_name: "IOS-GoSELLER-ProductManagement"
       test_config: "test_config/iOS/seller/productManagementTest.xml"
-      branch_name: $BRANCH_NAME
+      branch_name: "GoSELL-Thang"
 
 
   CleanJob:
     runs-on: ubuntu-20.04
     needs:
-      - CloneGit
       - Dashboard-ProductManagement
       - Storefront-ProductDetail-Promotion
       - Android-GoSELLER-ProductManagement
@@ -174,4 +182,5 @@ jobs:
       - name: Delete clone repository
         uses: geekyeggo/delete-artifact@v5
         with:
-          name: ClonedRepository
+          name: ClonedRepo
+
