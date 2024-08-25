@@ -17,7 +17,7 @@ jobs:
     secrets:
       VPN_USERNAME: ${{ secrets.VPN_USERNAME }}
       VPN_PASSWORD: ${{ secrets.VPN_PASSWORD }}
-      GIT_REPO: ${{ secrets.GIT_REPO }}
+      GIT_REPO: ${{ secrets.GITLAB_REPOSITORY }}
 
   Dashboard-CreateProduct:
     needs: Get-SourceCode
